@@ -1,0 +1,57 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "npm run with-env next build",
+    "build:ci": "npm run next build",
+    "dev": "npx kill-port 3000 && npm run with-env next dev -p 3000 --turbopack",
+    "start": "npm run with-env next start -p 3000",
+    "lint": "next lint && eslint . --ext .json && stylelint \"**/*.css\"",
+    "lint:fix": "next lint --fix && eslint . --ext .json --fix && stylelint \"**/*.css\" --fix",
+    "type-check": "tsc --noEmit",
+    "with-env": "dotenv -e ../../.env --"
+  },
+  "dependencies": {
+    "@number-flow/react": "^0.4.1",
+    "@tabler/icons-react": "^3.19.0",
+    "@types/react": "^18.3.11",
+    "clsx": "^2.1.0",
+    "cookies-next": "^4.3.0",
+    "dayjs": "^1.11.10",
+    "humanize-string": "^3.0.0",
+    "i18next": "^23.16.0",
+    "i18next-browser-languagedetector": "^7.2.1",
+    "i18next-resources-to-backend": "^1.2.1",
+    "lodash": "^4.17.21",
+    "next": "15.0.3",
+    "nextjs-router-events": "^0.0.3",
+    "pluralize": "^8.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-i18next": "^15.0.3",
+    "react-syntax-highlighter": "^15.6.1",
+    "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "@packages/eslint-config": "*",
+    "@types/lodash": "^4.14.198",
+    "@types/pluralize": "^0.0.33",
+    "@types/react-dom": "^18.2.23",
+    "@types/react-syntax-highlighter": "^15.5.13"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@packages/eslint-config/base",
+      "@packages/eslint-config/nextjs",
+      "@packages/eslint-config/react"
+    ],
+    "root": true
+  },
+  "stylelint": {
+    "extends": "@packages/eslint-config/style"
+  },
+  "resolutions": {
+    "@types/react": "^18.0.8"
+  }
+}

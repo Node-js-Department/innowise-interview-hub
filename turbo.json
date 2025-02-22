@@ -1,0 +1,41 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "ui": "stream",
+  "tasks": {
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**"
+      ],
+      "cache": false
+    },
+    "build:client": {
+      "cache": false
+    },
+    "type-check": {
+      "cache": false
+    },
+    "lint": {
+      "cache": false
+    },
+    "lint:fix": {
+      "cache": false
+    }
+  },
+  "globalEnv": [
+    "NODE_ENV",
+    "BASE_URI",
+    "AUTH_SERVICE_PORT",
+    "API_GATEWAY_URI",
+    "API_GATEWAY_PORT",
+    "NEXT_PUBLIC_API_GATEWAY_URI",
+    "CORE_SERVICE_PORT",
+    "CORE_SERVICE_HOST"
+  ]
+}

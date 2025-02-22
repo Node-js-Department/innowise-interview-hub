@@ -1,0 +1,40 @@
+name: CI Test
+run-name: ${{ github.actor }} is running prebuild pipeline
+on:
+  push:
+    branches-ignore:
+      - master
+      - main
+      - prod
+      - develop
+jobs:
+  run-defined-frontend-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout and instantiate node/yarn/yarn
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 21
+
+      # Cache the dependencies
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ./node_modules
+          key: modules-${{ hashFiles('npm.lock') }}
+
+      # Install dependencies
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm run --prefer-offline
+
+      # Check for ESLint
+      - name: Run ES Linting
+        run:  npm run lint
+
+      # Check for TSC Errors
+      - name: Run Type Checking (TSC)
+        run: npm run type-check

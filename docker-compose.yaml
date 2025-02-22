@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres
+    container_name: postgres_core_db
+    ports:
+      - '${DATABASE_PORT:-6501}:5432'
+    restart: always
+    env_file:
+      - ./.env
+    volumes:
+      - ./packages/db/postgres:/docker-entrypoint-initdb.d
+
+networks:
+  default:
+    driver: bridge
