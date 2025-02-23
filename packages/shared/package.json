@@ -16,8 +16,8 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "dayjs": "^1.11.10",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "moment": "^2.30.1"
   },
   "eslintConfig": {
     "extends": [

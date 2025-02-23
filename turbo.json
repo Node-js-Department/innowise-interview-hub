@@ -29,13 +29,15 @@
     }
   },
   "globalEnv": [
-    "NODE_ENV",
-    "BASE_URI",
-    "AUTH_SERVICE_PORT",
-    "API_GATEWAY_URI",
-    "API_GATEWAY_PORT",
-    "NEXT_PUBLIC_API_GATEWAY_URI",
     "CORE_SERVICE_PORT",
-    "CORE_SERVICE_HOST"
+    "CORE_SERVICE_HOST",
+    "JWT_KEY",
+    "NEXT_PUBLIC_APP_ENV",
+    "NEXT_PUBLIC_VERSION",
+    "NEO4J_SCHEME",
+    "NEO4J_HOST",
+    "NEO4J_PORT",
+    "NEO4J_USERNAME",
+    "NEO4J_PASSWORD"
   ]
 }

@@ -14,8 +14,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY .. .
 
-RUN yarn db:generate
-
 RUN SKIP_ENV_VALIDATION=1 yarn build --filter='!client'
 
 ##### RUNNER

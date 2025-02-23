@@ -1,6 +1,12 @@
 'use client';
 
-const Page = () => 'Main page';
+import { useEffect } from 'react';
 
-export default Page;
+export default function Page() {
 
+  useEffect(() => {
+    console.log('Hello!');
+  }, []);
+
+  return <h1>Hello Next.js!</h1>;
+}

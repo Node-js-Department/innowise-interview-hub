@@ -1,7 +1,6 @@
-//@ts-ignore
-import * as dayjs from 'dayjs';
+import * as moment from 'moment';
 /*
  * Returns the current UTC date, with the given format.
  */
 //@ts-ignore
-export const getCurrentDate = (format: string) => dayjs().format(format);
+export const getCurrentDate = (format: string) => moment().format(format);
