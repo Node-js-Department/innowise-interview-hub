@@ -20,8 +20,8 @@ services:
 
   core_server:
     build:
-      context: ./apps/core_server
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: apps/core_server/Dockerfile
     container_name: core_server
     restart: unless-stopped
     depends_on:
@@ -40,8 +40,8 @@ services:
 
   client:
     build:
-      context: ./apps/client
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: apps/client/Dockerfile
     container_name: client
     restart: unless-stopped
     depends_on:

@@ -14,7 +14,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY .. .
 
-RUN SKIP_ENV_VALIDATION=1 yarn build --filter='!client'
+RUN SKIP_ENV_VALIDATION=1 npm run build --filter='!client'
 
 ##### RUNNER
 
@@ -28,10 +28,10 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 core
 
 # Copying of internal packages (from monorepo)
-COPY --from=builder --chown=core:nodejs /app/packages/ ./src/packages/
+COPY --from=builder --chown=core:nodejs /packages/ ./src/packages/
 
-COPY --from=builder --chown=core:nodejs /app/apps/microservices/core/dist src
-COPY --from=builder --chown=core:nodejs /app/node_modules src/node_modules
+COPY --from=builder --chown=core:nodejs /apps/core_server/dist src
+COPY --from=builder --chown=core:nodejs /node_modules src/node_modules
 USER core
 EXPOSE 8005
 CMD ["node", "src/src/main.js"]
