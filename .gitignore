@@ -50,3 +50,5 @@ yarn-error.log*
 .idea/
 .env
 .eslintrc.yml
+
+**/logs/
