@@ -1,7 +1,5 @@
 'use client';
 
-import { RouteChangesProvider } from 'nextjs-router-events';
-
 import { LocaleProvider } from '../../hooks/locale-provider';
 
 import './style.css';
@@ -19,13 +17,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <title>Innowise Inteview Hub</title>
       </head>
       <body>
-        <RouteChangesProvider>
-          <main>
-            <LocaleProvider value='en'>
-              {children}
-            </LocaleProvider>
-          </main>
-        </RouteChangesProvider>
+        <main>
+          <LocaleProvider value='en'>
+            {children}
+          </LocaleProvider>
+        </main>
       </body>
     </html>
   );

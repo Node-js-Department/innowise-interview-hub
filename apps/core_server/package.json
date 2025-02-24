@@ -5,7 +5,7 @@
   "scripts": {
     "build": "nest build --tsc",
     "dev": "npm run with-env nest start --watch",
-    "with-env": "dotenv -e ../../../.env --",
+    "with-env": "dotenv -e ../../.env --",
     "start:prod": "node dist/main",
     "lint": "eslint .",
     "lint:fix": "npm run lint --fix",
@@ -30,7 +30,6 @@
   },
   "devDependencies": {
     "@nestjs/cli": "^10.4.5",
-    "@packages/eslint-config": "*",
     "typescript": "^5.4.5"
   },
   "eslintConfig": {
@@ -38,5 +37,9 @@
       "@packages/eslint-config/base"
     ],
     "root": true
+  },
+  "overrides": {
+    "minimatch": "5.1.2",
+    "glob": "8.1.0"
   }
 }
