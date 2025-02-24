@@ -1,3 +1,11 @@
+
+(
+  async () => {
+    const dotenv = await import('dotenv');
+    dotenv.config({ path: '../../.env' });
+  }
+)();
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',

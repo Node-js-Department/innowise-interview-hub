@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "npm run with-env next build",
+    "build": "next build",
     "build:ci": "npm run next build",
-    "dev": "npx kill-port 3000 && dotenv -e ../../.env -- next dev -p 3000 --turbopack",
+    "dev": "npx kill-port 3000 && next dev -p 3000 --turbopack",
     "start": "npm run with-env next start -p 3000",
     "lint": "next lint && eslint . --ext .json && stylelint \"**/*.css\"",
     "lint:fix": "next lint --fix && eslint . --ext .json --fix && stylelint \"**/*.css\" --fix",
