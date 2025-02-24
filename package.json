@@ -14,7 +14,6 @@
     "clean": "find ./apps ./packages -type d -name dist -prune -exec rm -rf {} +"
   },
   "dependencies": {
-    "@nestjs/cli": "^11.0.4",
     "commander": "^13.1.0",
     "eslint": "^8.57.0",
     "nest-winston": "^1.10.2",

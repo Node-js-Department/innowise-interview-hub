@@ -18,43 +18,43 @@ services:
       - neo4j_logs:/logs
       - neo4j_conf:/var/lib/neo4j/conf
 
-  core_server:
-    build:
-      context: .
-      dockerfile: apps/core_server/Dockerfile
-    container_name: core_server
-    restart: unless-stopped
-    depends_on:
-      - neo4j
-    ports:
-      - "3001:3001"
-    environment:
-      - NODE_ENV=production
-      - NEO4J_URI=bolt://neo4j:7687
-      - NEO4J_USER=neo4j
-      - NEO4J_PASSWORD=password
-    volumes:
-      - ./apps/core_server:/usr/src/app
-      - /usr/src/app/node_modules
-    command: ["npm", "run", "start:prod"]
+  # core_server:
+  #   build:
+  #     context: .
+  #     dockerfile: apps/core_server/Dockerfile
+  #   container_name: core_server
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - neo4j
+  #   ports:
+  #     - "3001:3001"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - NEO4J_URI=bolt://neo4j:7687
+  #     - NEO4J_USER=neo4j
+  #     - NEO4J_PASSWORD=password
+  #   volumes:
+  #     - ./apps/core_server:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   command: ["npm", "run", "start:prod"]
 
-  client:
-    build:
-      context: .
-      dockerfile: apps/client/Dockerfile
-    container_name: client
-    restart: unless-stopped
-    depends_on:
-      - core_server
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=production
-      - NEXT_PUBLIC_API_URL=http://core_server:3001
-    volumes:
-      - ./apps/client:/usr/src/app
-      - /usr/src/app/node_modules
-    command: ["npm", "run", "start"]
+  # client:
+  #   build:
+  #     context: .
+  #     dockerfile: apps/client/Dockerfile
+  #   container_name: client
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - core_server
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - NEXT_PUBLIC_API_URL=http://core_server:3001
+  #   volumes:
+  #     - ./apps/client:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   command: ["npm", "run", "start"]
 
 volumes:
   neo4j_data:
