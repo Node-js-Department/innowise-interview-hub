@@ -5,7 +5,7 @@
   "main": "index.js",
   "author": "Innowise Node.js department",
   "scripts": {
-    "dev": "npm run clean && npm run build --filter=!client && dotenv -- turbo watch dev --concurrency 20",
+    "dev": "npm run clean && turbo build --filter=!client && dotenv -- turbo watch dev --concurrency 20",
     "build": "turbo build",
     "build:client": "turbo --filter='client' build",
     "lint": "turbo lint",
@@ -26,7 +26,7 @@
     "@stylistic/eslint-plugin-migrate": "^1.8.0",
     "@types/express": "^5.0.0",
     "conventional-changelog-conventionalcommits": "^4.5.0",
-    "dotenv-cli": "latest",
+    "dotenv-cli": "^8.0.0",
     "ts-node": "^10.9.2"
   },
   "workspaces": [
