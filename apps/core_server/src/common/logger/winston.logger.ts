@@ -19,7 +19,6 @@ export const createWinstonLogger = (configService: ConfigService) => {
           winston.format.prettyPrint(),
           winston.format.printf(({ timestamp, level, message }) =>
             `(${timestamp}) [${level}]: ${message}`)
-
         ),
       }),
       new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
