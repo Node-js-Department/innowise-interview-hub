@@ -1,6 +1,6 @@
-import { PropsWithChildren } from 'react';
+import React from 'react';
 
-const ProtectedLayout = (props: PropsWithChildren) => {
+const ProtectedLayout = (props: { children: React.ReactNode }) => {
 
   const { children } = props;
   return (

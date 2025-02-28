@@ -1,13 +1,9 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 
-const SignInPage = (props: PropsWithChildren) => {
-
-  const { children } = props;
-  return (
-    <div>
-      <div>{children}</div>
-    </div>
-  );
-};
+const SignInPage = () => (
+  <div>
+    <div>Hello!</div>
+  </div>
+);
 
 export default SignInPage;
