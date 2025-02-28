@@ -6,7 +6,7 @@
   "author": "Innowise Node.js department",
   "scripts": {
     "dev": "npm run clean && turbo build --filter=!client && dotenv -- turbo watch dev --concurrency 20",
-    "build": "turbo build",
+    "build": "turbo build --filter=!client",
     "build:client": "turbo --filter='client' build",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
