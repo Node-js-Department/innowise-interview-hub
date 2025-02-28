@@ -1,13 +1,9 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 
-const ProfilePage = (props: PropsWithChildren) => {
-
-  const { children } = props;
-  return (
-    <div>
-      <div>{children}</div>
-    </div>
-  );
-};
+const ProfilePage = () => (
+  <div>
+    <div>Hello!</div>
+  </div>
+);
 
 export default ProfilePage;

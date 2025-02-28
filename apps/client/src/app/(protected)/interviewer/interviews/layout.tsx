@@ -1,6 +1,6 @@
-import { PropsWithChildren } from 'react';
+import React from 'react';
 
-const InterviewsLayout = (props: PropsWithChildren) => {
+const InterviewsLayout = (props: { children: React.ReactNode }) => {
 
   const { children } = props;
   return (

@@ -1,6 +1,6 @@
-import { PropsWithChildren } from 'react';
+import React from 'react';
 
-const AnalyticsLayout = (props: PropsWithChildren) => {
+const AnalyticsLayout = (props: { children: React.ReactNode }) => {
 
   const { children } = props;
   return (

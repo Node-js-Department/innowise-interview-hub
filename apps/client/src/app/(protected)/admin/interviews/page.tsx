@@ -1,13 +1,9 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 
-const AdminAnalyticsPage = (props: PropsWithChildren) => {
-
-  const { children } = props;
-  return (
-    <div>
-      <div>{children}</div>
-    </div>
-  );
-};
+const AdminAnalyticsPage = () => (
+  <div>
+    <div>Hello!</div>
+  </div>
+);
 
 export default AdminAnalyticsPage;

@@ -1,13 +1,9 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 
-const AdminProfilePage = (props: PropsWithChildren) => {
-
-  const { children } = props;
-  return (
-    <div>
-      <div>{children}</div>
-    </div>
-  );
-};
+const AdminProfilePage = () => (
+  <div>
+    <div>Hello!</div>
+  </div>
+);
 
 export default AdminProfilePage;

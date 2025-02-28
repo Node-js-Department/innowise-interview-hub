@@ -1,6 +1,6 @@
-import { PropsWithChildren } from 'react';
+import React from 'react';
 
-const AdminInterviewsLayout = (props: PropsWithChildren) => {
+const AdminInterviewsLayout = (props: { children: React.ReactNode }) => {
 
   const { children } = props;
   return (
