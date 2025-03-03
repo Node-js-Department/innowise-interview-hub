@@ -13,7 +13,7 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@number-flow/react": "^0.4.1",
+    "@number-flow/react": "^0.5.5",
     "@tabler/icons-react": "^3.19.0",
     "@types/react": "^18.3.11",
     "clsx": "^2.1.0",
