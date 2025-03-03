@@ -1,0 +1,43 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "ui": "stream",
+  "tasks": {
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**"
+      ],
+      "cache": false
+    },
+    "build:client": {
+      "cache": false
+    },
+    "type-check": {
+      "cache": false
+    },
+    "lint": {
+      "cache": false
+    },
+    "lint:fix": {
+      "cache": false
+    }
+  },
+  "globalEnv": [
+    "CORE_SERVICE_PORT",
+    "CORE_SERVICE_HOST",
+    "JWT_KEY",
+    "NEXT_PUBLIC_APP_ENV",
+    "NEXT_PUBLIC_VERSION",
+    "NEO4J_SCHEME",
+    "NEO4J_HOST",
+    "NEO4J_PORT",
+    "NEO4J_USERNAME",
+    "NEO4J_PASSWORD"
+  ]
+}

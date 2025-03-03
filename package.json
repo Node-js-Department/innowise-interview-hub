@@ -1,0 +1,39 @@
+{
+  "name": "innowise-inteview-hub",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "author": "Innowise Node.js department",
+  "scripts": {
+    "dev": "npm run clean && turbo build --filter=!client && dotenv -- turbo watch dev --concurrency 20",
+    "build": "turbo build --filter=!client",
+    "build:client": "turbo --filter='client' build",
+    "lint": "turbo lint",
+    "lint:fix": "turbo lint:fix",
+    "type-check": "turbo type-check",
+    "clean": "find ./apps ./packages -type d -name dist -prune -exec rm -rf {} +"
+  },
+  "dependencies": {
+    "commander": "^13.1.0",
+    "eslint": "^8.57.0",
+    "nest-winston": "^1.10.2",
+    "turbo": "^2.4.2",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "^1.8.0",
+    "@stylistic/eslint-plugin-js": "^2.1.0",
+    "@stylistic/eslint-plugin-migrate": "^1.8.0",
+    "@types/express": "^5.0.0",
+    "conventional-changelog-conventionalcommits": "^4.5.0",
+    "dotenv-cli": "^8.0.0",
+    "ts-node": "^10.9.2"
+  },
+  "workspaces": [
+    "packages/config/*",
+    "packages/shared/*",
+    "apps/*",
+    "packages/*"
+  ],
+  "packageManager": "npm@11.1.0"
+}

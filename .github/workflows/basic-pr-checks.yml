@@ -1,0 +1,30 @@
+name: Basic PR checks
+
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+jobs:
+  checkPrTitle:
+    name: Validate PR title is in semantic format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: amannn/action-semantic-pull-request@v5
+        with:
+          types: |
+            fix
+            feat
+            e2e
+            docs
+            build
+            chore
+            refactor
+            break
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  assignAuthor:
+    name: Assign author to PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign author to PR
+        uses: technote-space/assign-author@v1

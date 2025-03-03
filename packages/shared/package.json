@@ -1,0 +1,30 @@
+{
+  "name": "@packages/shared",
+  "version": "0.0.1",
+  "description": "Utilities shared by the different apps",
+  "main": "./dist/index",
+  "types": "./dist/index",
+  "scripts": {
+    "clean-dist": "rm -rf dist",
+    "dev": "npm run clean-dist && tsc",
+    "build": "npm run clean-dist && tsc --build --force tsconfig.json",
+    "lint": "eslint .",
+    "lint:fix": "npm run lint --fix",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "moment": "^2.30.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@packages/eslint-config/base",
+      "@packages/eslint-config/nextjs",
+      "@packages/eslint-config/react"
+    ],
+    "root": true
+  }
+}
