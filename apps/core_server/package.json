@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@nestjs/cli": "^10.4.5",
-    "typescript": "^5.4.5"
+    "typescript": "^5.8.2"
   },
   "eslintConfig": {
     "extends": [
