@@ -56,7 +56,5 @@
     "dist",
     "out",
     "build",
-    "src/components",
-    "src/lib"
   ]
 }
