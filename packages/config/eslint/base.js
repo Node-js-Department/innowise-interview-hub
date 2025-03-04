@@ -9,7 +9,7 @@ module.exports = {
 		es2021: true,
 		node: true,
 	},
-	ignorePatterns: ["vite.config.ts", "**/dist/", "**/out/", "**/build/", "clientPrisma"],
+	ignorePatterns: ["vite.config.ts", "**/dist/", "**/out/", "**/build/", "clientPrisma","**/src/components"],
 	extends: [
 		"turbo",
 		"eslint:recommended",
