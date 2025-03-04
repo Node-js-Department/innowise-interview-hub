@@ -28,6 +28,8 @@ async function bootstrap() {
     })
   );
 
+  app.setGlobalPrefix('api');
+
   app.useGlobalFilters(new AllExceptionsFilter());
 
   await app.listen(
