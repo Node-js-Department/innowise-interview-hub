@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "npm run clean && turbo build --filter=!client && dotenv -- turbo watch dev --concurrency 20",
     "build": "turbo build --filter=!client",
-    "build:client": "turbo --filter='client' build",
+    "build:client": "turbo --filter=client build",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
     "type-check": "turbo type-check",
