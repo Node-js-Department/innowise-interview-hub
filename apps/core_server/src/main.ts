@@ -34,5 +34,6 @@ async function bootstrap() {
     configService.get('CORE_SERVICE_PORT') as unknown as number || '8005',
     configService.get('CORE_SERVICE_HOST') as unknown as string || '0.0.0.0'
   );
+
 }
 bootstrap();

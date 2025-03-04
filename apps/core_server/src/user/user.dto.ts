@@ -6,6 +6,10 @@ export class CreateUserDTO {
 
   @IsEmail()
   email: string;
+
+  @IsString()
+  @IsOptional()
+  technology?: string;
 }
 
 export class UpdateUserDTO {
@@ -16,4 +20,8 @@ export class UpdateUserDTO {
   @IsEmail()
   @IsOptional()
   email?: string;
+
+  @IsString()
+  @IsOptional()
+  technology?: string;
 }

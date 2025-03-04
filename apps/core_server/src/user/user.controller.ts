@@ -3,6 +3,8 @@ import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
 import { CreateUserDTO, UpdateUserDTO } from './user.dto';
 import { UserService } from './user.service';
 
+import { EUserRole } from '@/common/models';
+
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -10,6 +12,11 @@ export class UserController {
   @Get()
   async getAllUsers() {
     return await this.userService.findAll();
+  }
+
+  @Get('/candidates')
+  async getAllByRole() {
+    return await this.userService.findAllByRole(EUserRole.Candidate);
   }
 
   @Post()
