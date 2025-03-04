@@ -3,9 +3,12 @@ import { QuestionsService } from './questions.service';
 import { QuestionsController } from './questions.controller';
 import { Neo4jModule } from 'nest-neo4j';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ImportService } from './import.service';
+import {HttpModule} from "@nestjs/axios";
 
 @Module({
   imports: [
+    HttpModule,
     ConfigModule,
     Neo4jModule.forRootAsync({
       useFactory: async (configService: ConfigService) => ({
@@ -19,6 +22,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
   ],
   controllers: [QuestionsController],
-  providers: [QuestionsService],
+  providers: [QuestionsService, ImportService],
 })
 export class QuestionsModule {}
