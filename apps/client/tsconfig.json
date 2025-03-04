@@ -55,8 +55,6 @@
     "node_modules",
     "dist",
     "out",
-    "build",
-    "src/components",
-    "src/lib"
+    "build"
   ]
 }
