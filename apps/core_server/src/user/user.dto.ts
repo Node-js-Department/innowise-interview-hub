@@ -8,7 +8,8 @@ export class CreateUserDTO {
   email: string;
 
   @IsString()
-  technology: string;
+  @IsOptional()
+  technology?: string;
 }
 
 export class UpdateUserDTO {
