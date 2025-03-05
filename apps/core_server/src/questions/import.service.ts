@@ -14,7 +14,7 @@ export class ImportService {
   async importDataStatic(): Promise<any> {
     try {
 
-      const filePath = path.resolve(__dirname,'../../importJson/q.json');
+      const filePath = path.resolve(process.cwd(), '/importJson/q.json');
       const fileContent = await fs.readFile(filePath, { encoding: 'utf-8' });
 
       const jsonData = JSON.parse(fileContent);

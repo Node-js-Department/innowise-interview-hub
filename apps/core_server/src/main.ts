@@ -12,6 +12,9 @@ async function bootstrap() {
     bufferLogs: true,
   });
 
+  app.setGlobalPrefix('api');
+
+
   const Swaggerconfig = new DocumentBuilder()
     .setTitle('Innointerview API')
     .setDescription('API for managing questions, import/export operations, interviews, eth.')
@@ -43,7 +46,6 @@ async function bootstrap() {
 
   app.useGlobalFilters(new AllExceptionsFilter());
 
-  app.setGlobalPrefix('api');
 
   await app.listen(
     (configService.get('CORE_SERVICE_PORT') as unknown as number) || 8005,
