@@ -3,7 +3,6 @@ import { DatabaseModule } from 'src/database/database.module';
 import { Neo4jModule } from 'nest-neo4j';
 import { ConfigService } from '@nestjs/config';
 import { QuestionsModule } from './questions/questions.module';
-import { Neo4jModule } from 'nest-neo4j';
 import { ConfigModule } from '@nestjs/config';
 
 

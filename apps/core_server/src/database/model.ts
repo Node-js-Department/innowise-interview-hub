@@ -1,5 +1,6 @@
 export enum EEntities {
-  User = 'User'
+  User = 'User',
+  Interview = 'Interview'
 }
 
 export type TEntityType<S> = {

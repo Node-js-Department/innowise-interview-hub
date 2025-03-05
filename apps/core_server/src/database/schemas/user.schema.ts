@@ -19,7 +19,7 @@ export const UserSchema: Neode.SchemaObject = {
     eager: true,
   },
 
-  technology: { type: 'string' },
+  // technology: { type: 'string' },
   createdAt: { type: 'datetime', default: () => new Date().toISOString() },
   updatedAt: { type: 'datetime', default: () => new Date().toISOString() },
 };
