@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Header } from '@app/(protected)/_components/Header /Header';
+import { Header } from '@app/(protected)/_components/Header/Header';
 import { CustomTrigger } from '@app/(protected)/_components/Sidebar/CustomTriggerSidebar';
 import { AppSidebar } from '@app/(protected)/_components/Sidebar/Sidebar';
 
