@@ -7,6 +7,7 @@ import path from 'path';
 import * as fs from 'fs/promises';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 
 @ApiTags('questions')
 @Controller('questions')
@@ -28,20 +29,18 @@ export class QuestionsController {
   }
 
   @Get('export')
-  @ApiOperation({ summary: 'Export questions from db to server folder' })
+  @ApiOperation({ summary: 'Export questions from db' })
   @ApiResponse({ status: 200, description: 'Data exported successfully' })
   @ApiResponse({ status: 500, description: 'Export error' })
-  async ExportJson()  {
+  async ExportJson(@Res() res: Response)  {
     try{
-      const dataToExport = await this.exportService.exportJson();
+      const dataToExport = await this.exportService.exportJson(res);
       return{
         message: 'Data exported successfully',
       }
     } catch(error){
       console.error('Export error', error);
-      return {
-        message: 'Export error',
-      }
+      throw new Error('Export error');
     }
 
   }
@@ -59,9 +58,7 @@ export class QuestionsController {
       }
     } catch (error) {
       console.error(' Import error:', error);
-      return {
-        message: 'Import error',
-      }
+      throw new Error('Emport error')
     }
   }
 
