@@ -45,6 +45,9 @@ yarn-error.log*
 # turbo
 .turbo
 
+#questions
+importJson
+
 .wrangler/
 /apps/dist/
 .idea/
