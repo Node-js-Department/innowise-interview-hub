@@ -6,7 +6,9 @@ import { QuestionsService } from './questions.service';
 import path from 'path';
 import * as fs from 'fs/promises';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('questions')
 @Controller('questions')
 export class QuestionsController {
   constructor(private readonly questionsService: QuestionsService,
@@ -16,11 +18,19 @@ export class QuestionsController {
 
 
   @Get()
-  findAll()  {
+  @ApiOperation({ summary: 'Get all questions (json)' })
+  @ApiResponse({
+    status: 200,
+    description: 'return all questions',
+  })
+  findAll() {
     return this.questionsService.findAll();
   }
 
   @Get('export')
+  @ApiOperation({ summary: 'Export questions from db to server folder' })
+  @ApiResponse({ status: 200, description: 'Data exported successfully' })
+  @ApiResponse({ status: 500, description: 'Export error' })
   async ExportJson()  {
     try{
       const dataToExport = await this.exportService.exportJson();
@@ -37,6 +47,9 @@ export class QuestionsController {
   }
 
   @Post('import/static')
+  @ApiOperation({ summary: 'Import static data from server folder' })
+  @ApiResponse({ status: 201, description: 'Data imported successfully' })
+  @ApiResponse({ status: 500, description: 'Import error' })
   async importStatic(): Promise<any> {
     try {
       const result = await this.importService.importDataStatic();
@@ -53,6 +66,19 @@ export class QuestionsController {
   }
 
   @Post('import')
+  @ApiOperation({ summary: 'Import file' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: { type: 'string', format: 'binary' },
+      },
+    },
+  })
+  @ApiResponse({ status: 201, description: 'File uploaded and processed successfully' })
+  @ApiResponse({ status: 400, description: 'File is required' })
+  @ApiResponse({ status: 500, description: 'Upload error' })
   @UseInterceptors(FileInterceptor('file'))
 
   async upload(@UploadedFile() file: Express.Multer.File): Promise<any> {

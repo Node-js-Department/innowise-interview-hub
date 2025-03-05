@@ -5,11 +5,23 @@ import { ExpressAdapter } from '@nestjs/platform-express';
 import { json, urlencoded } from 'express';
 import { AllExceptionsFilter } from './common';
 import { CoreModule } from './core.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(CoreModule, new ExpressAdapter(), {
     bufferLogs: true,
   });
+
+  const Swaggerconfig = new DocumentBuilder()
+    .setTitle('Innointerview API')
+    .setDescription('API for managing questions, import/export operations, interviews, eth.')
+    .setVersion('1.0')
+    .addTag('InnoInterview')
+    .build();
+
+
+  const document = SwaggerModule.createDocument(app, Swaggerconfig);
+  SwaggerModule.setup('api/docs', app, document);
 
   const configService = app.get(ConfigService);
 

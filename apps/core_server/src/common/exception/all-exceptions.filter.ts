@@ -30,7 +30,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     this.logger.error(`[${status}] ${message}`);
     
-    response.code(status).send({
+    response.status(status).json({
       statusCode: status,
       message,
       timestamp: new Date().toISOString(),
