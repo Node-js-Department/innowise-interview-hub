@@ -1,0 +1,28 @@
+<svg width="234" height="141" viewBox="0 0 234 141" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="234" height="341" transform="matrix(1 0 0 -1 0 341)" fill="white" fill-opacity="0.1"/>
+<g clip-path="url(#clip0)">
+<circle cx="30.5" cy="35.5" r="5.5" transform="rotate(-90 30.5 35.5)" fill="#E2E2E2"/>
+<circle cx="58.5" cy="35.5" r="5.5" transform="rotate(-90 58.5 35.5)" fill="#E2E2E2"/>
+<circle cx="113.5" cy="35.5" r="5.5" transform="rotate(-90 113.5 35.5)" fill="#E2E2E2"/>
+<circle cx="140.5" cy="35.5" r="5.5" transform="rotate(-90 140.5 35.5)" fill="#E2E2E2"/>
+<circle cx="30.5" cy="62.5" r="5.5" transform="rotate(-90 30.5 62.5)" fill="#E2E2E2"/>
+<circle cx="58.5" cy="62.5" r="5.5" transform="rotate(-90 58.5 62.5)" fill="#E2E2E2"/>
+<circle cx="85.5" cy="68.5" r="5.5" transform="rotate(-90 85.5 68.5)" fill="#E2E2E2"/>
+<circle cx="113.5" cy="62.5" r="5.5" transform="rotate(-90 113.5 62.5)" fill="#E2E2E2"/>
+<circle cx="57.5" cy="90.5" r="5.5" transform="rotate(-90 57.5 90.5)" fill="#E2E2E2"/>
+<circle cx="85.5" cy="90.5" r="5.5" transform="rotate(-90 85.5 90.5)" fill="#E2E2E2"/>
+<circle cx="113.5" cy="90.5" r="5.5" transform="rotate(-90 113.5 90.5)" fill="#E2E2E2"/>
+<circle cx="140.5" cy="90.5" r="5.5" transform="rotate(-90 140.5 90.5)" fill="#E2E2E2"/>
+<circle cx="57.5" cy="118.5" r="5.5" transform="rotate(-90 57.5 118.5)" fill="#E2E2E2"/>
+<circle cx="85.5" cy="118.5" r="5.5" transform="rotate(-90 85.5 118.5)" fill="#E2E2E2"/>
+<circle cx="113.5" cy="118.5" r="5.5" transform="rotate(-90 113.5 118.5)" fill="#E2E2E2"/>
+<circle cx="140.5" cy="118.5" r="5.5" transform="rotate(-90 140.5 118.5)" fill="#E2E2E2"/>
+<circle cx="168.5" cy="118.5" r="5.5" transform="rotate(-90 168.5 118.5)" fill="#E2E2E2"/>
+<circle cx="196.5" cy="118.5" r="5.5" transform="rotate(-90 196.5 118.5)" fill="#E2E2E2"/>
+</g>
+<defs>
+<clipPath id="clip0">
+<rect width="261" height="178" fill="white" transform="translate(24 291) rotate(-90)"/>
+</clipPath>
+</defs>
+</svg>
