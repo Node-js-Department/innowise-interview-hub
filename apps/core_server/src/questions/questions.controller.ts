@@ -1,4 +1,6 @@
+import { ConfigService } from '@nestjs/config';
 import { ImportService } from './import.service';
+import { ExportService } from './export.service';
 import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Res, HttpException, HttpStatus, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { QuestionsService } from './questions.service';
 import path from 'path';
@@ -9,12 +11,29 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class QuestionsController {
   constructor(private readonly questionsService: QuestionsService,
     private readonly importService: ImportService,
+    private readonly exportService: ExportService,
   ) {}
 
 
   @Get()
   findAll()  {
     return this.questionsService.findAll();
+  }
+
+  @Get('export')
+  async ExportJson()  {
+    try{
+      const dataToExport = await this.exportService.exportJson();
+      return{
+        message: 'Data exported successfully',
+      }
+    } catch(error){
+      console.error('Export error', error);
+      return {
+        message: 'Export error',
+      }
+    }
+
   }
 
   @Post('import/static')
@@ -58,16 +77,5 @@ export class QuestionsController {
       console.error('Upload error', error);
       throw new HttpException(' Upload error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.questionsService.findOne(+id);
-  }
-
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.questionsService.remove(+id);
   }
 }
