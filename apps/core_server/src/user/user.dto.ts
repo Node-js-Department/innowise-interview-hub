@@ -4,11 +4,12 @@ export class CreateUserDTO {
   @IsString()
   name: string;
 
+  @IsString()
   @IsEmail()
   email: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   technology?: string;
 }
 

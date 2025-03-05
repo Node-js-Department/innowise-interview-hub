@@ -9,6 +9,16 @@ export const UserSchema: Neode.SchemaObject = {
   name: { type: 'string', required: true },
   email: { type: 'string', required: true, unique: true },
   role: { type: 'string', required: true, default: EUserRole.Candidate },
+  technology: { type: 'string', required: true },
+
+  interviews: {
+    type: 'relationship',
+    target: 'Interview',
+    relationship: 'PARTICIPATES_IN',
+    direction: 'out',
+    eager: true,
+  },
+
   technology: { type: 'string' },
   createdAt: { type: 'datetime', default: () => new Date().toISOString() },
   updatedAt: { type: 'datetime', default: () => new Date().toISOString() },
