@@ -15,13 +15,11 @@ export class ImportService {
     try {
 
       const filePath = path.resolve(process.cwd(), '/importJson/q.json');
-      console.log(filePath)
       const fileContent = await fs.readFile(filePath, { encoding: 'utf-8' });
 
       const jsonData = JSON.parse(fileContent);
 
       const url = this.configService.get('DB_IMPORT_URL');
-      console.log(url)
       if(!url){
         throw new Error('DB_IMPORT_URL is not defined')
       }
