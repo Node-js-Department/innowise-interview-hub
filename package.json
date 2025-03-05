@@ -7,14 +7,17 @@
   "scripts": {
     "dev": "npm run clean && turbo build --filter=!client && dotenv -- turbo watch dev --concurrency 20",
     "build": "turbo build --filter=!client",
-    "build:client": "turbo --filter='client' build",
+    "build:client": "turbo --filter=client build",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
     "type-check": "turbo type-check",
     "clean": "find ./apps ./packages -type d -name dist -prune -exec rm -rf {} +"
   },
   "dependencies": {
+    "@nestjs/config": "^4.0.1",
+    "@nestjs/mapped-types": "*",
     "commander": "^13.1.0",
+    "dotenv": "^16.4.7",
     "eslint": "^8.57.0",
     "nest-winston": "^1.10.2",
     "turbo": "^2.4.2",

@@ -3,6 +3,8 @@ import Neode from 'neode';
 
 import { NEO4J_TOKEN } from './neode.provider';
 
+import { EUserRole } from '@/common/models';
+
 @Injectable()
 export abstract class BaseNeodeService<T, CreateDto = Partial<T>, UpdateDto = Partial<T>> {
   private readonly logger = new Logger(BaseNeodeService.name);
@@ -22,10 +24,23 @@ export abstract class BaseNeodeService<T, CreateDto = Partial<T>, UpdateDto = Pa
     }
   }
 
+  async findAllByRole(role: EUserRole): Promise<T[]> {
+    try {
+      const instances = await this.neode.model(this.modelName).all({ role });
+      const promises = instances.map((node: Neode.Node<T>) => node.toJson()) as T[];
+      return await Promise.all(promises);
+    } catch (error) {
+      this.logger.error(`Error fetching all ${this.modelName}:`, error);
+      throw error;
+    }
+  }
+
   async findAll(): Promise<T[]> {
     try {
+
       const instances = await this.neode.model(this.modelName).all();
-      return instances.map((node: Neode.Node<T>) => node.toJson()) as T[];
+      const promises = instances.map((node: Neode.Node<T>) => node.toJson()) as T[];
+      return await Promise.all(promises);
     } catch (error) {
       this.logger.error(`Error fetching all ${this.modelName}:`, error);
       throw error;

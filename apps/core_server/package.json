@@ -5,6 +5,7 @@
   "scripts": {
     "build": "nest build --tsc",
     "dev": "npm run with-env -- nest start --watch",
+    "dev": "npm run with-env -- nest start --watch",
     "with-env": "dotenv -e ../../.env --",
     "start:prod": "node dist/main",
     "lint": "eslint .",

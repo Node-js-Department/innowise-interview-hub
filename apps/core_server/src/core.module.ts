@@ -4,6 +4,9 @@ import { QuestionsModule } from './questions/questions.module';
 import { Neo4jModule } from 'nest-neo4j';
 import { ConfigModule } from '@nestjs/config';
 
+import { UserController } from './user/user.controller';
+import { UserService } from './user/user.service';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -13,7 +16,7 @@ import { ConfigModule } from '@nestjs/config';
     QuestionsModule,
     Neo4jModule,
   ],
-  controllers: [],
-  providers: [],
+  controllers: [UserController],
+  providers: [UserService],
 })
 export class CoreModule { }
