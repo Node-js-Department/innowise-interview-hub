@@ -2,9 +2,7 @@ import { Neo4jService } from 'nest-neo4j';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { QueryResult } from 'neo4j-driver';
 
-import { TAny } from '@packages/shared';
-
-import { UpdatedAnswerDTO } from './questions.dto';
+import { UpdatedAnswerDTO, tFollowup } from './questions.dto';
 import { IDomain } from './questions.dto';
 
 @Injectable()
@@ -20,15 +18,15 @@ export class QuestionsService {
     ORDER BY followup.weight
   `;
 
-  const res = await this.neo4jService.read(query, { questionId });
+    const res = await this.neo4jService.read(query, { questionId });
 
-  return res.records.map(record => ({
-    id: record.get('id'),
-    title: record.get('title'),
-    weight: record.get('weight').toNumber(),
-  }));
+    return res.records.map(record => ({
+      id: record.get('id'),
+      title: record.get('title'),
+      weight: record.get('weight').toNumber(),
+    }));
   }
-  
+
   async findAll(): Promise<any> {
     const query = `
       MATCH (d:Domain)-[:HAS_TOPIC]->(t:Topic)
@@ -96,8 +94,8 @@ export class QuestionsService {
         const followups = record.get('followups') ?? [];
 
         question.followUpQuestions = followups
-          .filter((fq: TAny) => fq && fq.properties)
-          .map((fq: TAny) => ({
+          .filter((fq: Tfollowup) => fq && fq.properties)
+          .map((fq: Tfollowup) => ({
             id: fq.properties.id,
             title: fq.properties.title,
             weight: fq.properties.weight.toNumber(),

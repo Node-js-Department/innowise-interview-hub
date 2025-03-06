@@ -1,8 +1,9 @@
 import { HttpException, HttpStatus, Injectable, Inject } from '@nestjs/common';
 import { Neo4jService } from 'nest-neo4j';
 import { QueryResult } from 'neo4j-driver';
-import { NEO4J_TOKEN } from '@/database/neode.provider';
 import Neode from 'neode';
+
+import { NEO4J_TOKEN } from '@/database/neode.provider';
 import { Tfollowup } from '@/questions/questions.dto';
 
 @Injectable()
@@ -142,8 +143,7 @@ export class InterviewService {
         weight: +f.weight.toString(),
       })),
     }));
-}
-
+  }
 
   async getInterviewResults(interviewId: string) {
     const query = `
@@ -163,29 +163,28 @@ RETURN
   COUNT(DISTINCT CASE WHEN f.isskip = true THEN f END) AS skippedFollowQuestions;
   `;
 
-  const params = { interviewId };
+    const params = { interviewId };
 
-  const res: QueryResult = await this.neo4jService.read(query, params);
+    const res: QueryResult = await this.neo4jService.read(query, params);
 
-  if (!res.records.length) {
-    throw new Error(`Interview ${interviewId} not found`);
-  }
+    if (!res.records.length) {
+      throw new Error(`Interview ${interviewId} not found`);
+    }
 
-  const record = res.records[0];
-  const interviewIdResult: string = record.get('interviewId');
-  const interviewDuration: string = record.get('interviewDuration');
-  const interviewDate: string =  record.get('date')
-  const avgScore: number = +record.get('avgScore').toString();
-  const totalQuestions: number = +record.get('totalQuestions').toString();
-  const totalFollowQuestions: number = +record.get('totalFollowQuestions').toString();
-  // const time = interviewDate - interviewDuration;
-  const skippedQuestions: number = +record.get('skippedQuestions').toString();
-  const skippedFollowQuestions: number = +record.get('skippedFollowQuestions').toString();
-  const countPrimary = totalQuestions - skippedQuestions;
-  const countFollowUp = totalFollowQuestions - skippedFollowQuestions;
+    const record = res.records[0];
+    const interviewIdResult: string = record.get('interviewId');
+    // const interviewDuration: string = record.get('interviewDuration');
+    const interviewDate: string = record.get('date');
+    const avgScore: number = +record.get('avgScore').toString();
+    const totalQuestions: number = +record.get('totalQuestions').toString();
+    const totalFollowQuestions: number = +record.get('totalFollowQuestions').toString();
+    // const time = interviewDate - interviewDuration;
+    const skippedQuestions: number = +record.get('skippedQuestions').toString();
+    const skippedFollowQuestions: number = +record.get('skippedFollowQuestions').toString();
+    const countPrimary = totalQuestions - skippedQuestions;
+    const countFollowUp = totalFollowQuestions - skippedFollowQuestions;
 
-
-  return {
+    return {
       interviewId: interviewIdResult,
       interviewDate,
       avgScore,
@@ -194,6 +193,6 @@ RETURN
       // time,
       countPrimary: `${countPrimary}/${totalQuestions}`,
       countFollowUp: `${countFollowUp}/${totalFollowQuestions}`,
-  };
-}
+    };
+  }
 }

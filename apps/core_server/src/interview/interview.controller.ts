@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+
 import { InterviewService } from './interview.service';
 import { CreateInterviewDto } from './interview.dto';
 
