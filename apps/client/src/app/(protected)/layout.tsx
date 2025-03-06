@@ -1,37 +1,25 @@
-'use client';
-import React, { useState } from 'react';
-import { Header } from '@app/(protected)/_components/Header/Header';
-import { CustomTrigger } from '@app/(protected)/_components/Sidebar/CustomTriggerSidebar';
-import { AppSidebar } from '@app/(protected)/_components/Sidebar/Sidebar';
+import React from 'react';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { isTokenValid } from '@/lib/actions';
 
-import { SidebarProvider } from '@/components/ui/sidebar';
+const ProtectedLayout = async ({ children }: { children: React.ReactNode }) => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('access_token')?.value;
 
-const ProtectedLayout = (props: { children: React.ReactNode }) => {
-  const [breadcrumbItems, setBreadcrumbItems] = useState([
-    { title: 'InterviewHub', url: '/' },
-  ]);
-  const handleSidebarMenuItemClick = (title: string, url: string) => {
-    setBreadcrumbItems([
-      { title: 'InterviewHub', url: '/' },
-      { title, url },
-    ]);
-  };
-  const { children } = props;
+  if (!token) {
+    redirect('/signin');
+  }
+
+  const isValid = await isTokenValid(token);
+  if (!isValid) {
+    redirect('/signin');
+  }
+
   return (
-    <div className='flex flex-col'>
-      <div className='sticky top-0 z-2'>
-        <Header pictureUrl='url' fallback='fallback' username='username' position='position' breadcrumbItems={breadcrumbItems} />
-      </div>
-      <div className='flex flex-row z-1'>
-        <SidebarProvider>
-          <AppSidebar onMenuItemClick={handleSidebarMenuItemClick}/>
-          <main>
-            <CustomTrigger/>
-            {children}
-          </main>
-        </SidebarProvider>
-      </div>
-    </div>
+    <>
+      {children}
+    </>
   );
 };
 

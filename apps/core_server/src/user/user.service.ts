@@ -15,4 +15,12 @@ export class UserService
     super(neode, EEntities.User);
   }
 
+  async findOneByEmail(email: string): Promise<TUser | null> {
+    try {
+      const instance = await this.neode.model(this.modelName).first('email', email);
+      return instance ? (await instance.toJson() as TUser) : null;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
