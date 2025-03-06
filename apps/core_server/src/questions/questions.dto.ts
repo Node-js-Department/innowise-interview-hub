@@ -2,7 +2,14 @@ export interface Followup {
     id: string;
     tags: string[];
     title: string;
-    weight: number;
+    weight: string;
+  }
+
+  export type Tfollowup = {
+    id: string,
+    tags: string[],
+    title: string,
+    weight: string,
   }
 
   export interface Question {

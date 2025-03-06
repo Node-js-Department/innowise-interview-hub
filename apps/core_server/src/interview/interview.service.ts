@@ -3,6 +3,7 @@ import { Neo4jService } from 'nest-neo4j';
 import { QueryResult } from 'neo4j-driver';
 import { NEO4J_TOKEN } from '@/database/neode.provider';
 import Neode from 'neode';
+import { Tfollowup } from '@/questions/questions.dto';
 
 @Injectable()
 export class InterviewService {
@@ -111,17 +112,20 @@ export class InterviewService {
 
   async getInterviewQuestions(interviewId: string) {
     const query = `
-      MATCH (i:Interview {id: $interviewId})-[:HAS_INTERVIEW_QUESTION]->(iq:InterviewQuestion)-[:REFERS_TO]->(q:Question)
-      RETURN q.id AS question_id, q.title AS question_title, q.weight AS question_weight
-      ORDER BY q.weight
+      MATCH (i:Interview {id: "interview_1741252701545"})-[:HAS_INTERVIEW_QUESTION]->(iq:InterviewQuestion)-[:REFERS_TO]->(q:Question)
+    OPTIONAL MATCH (q)-[:HAS_FOLLOWUP]->(followup:FollowUpQuestion)
+    WITH q, collect(followup) AS followups
+    RETURN q.id AS question_id, q.title AS question_title, q.weight AS question_weight,
+    [f IN followups | {id: f.id, title: f.title, weight: f.weight}] AS followup_questions
+    ORDER BY q.weight
     `;
   
     const params = { interviewId };
-    
+  
     const res: QueryResult = await this.neo4jService.read(query, params);
   
     if (!res.records.length) {
-      console.warn(`No questions to this interview ID: ${interviewId}`);
+      console.warn(`No questions found for interview ID: ${interviewId}`);
       return [];
     }
   
@@ -129,6 +133,11 @@ export class InterviewService {
       id: record.get('question_id'),
       title: record.get('question_title'),
       weight: record.get('question_weight').toNumber(),
+      followupQuestions: record.get('followup_questions').map((f:Tfollowup) => ({
+        id: f.id,
+        title: f.title,
+        weight: +f.weight.toString(),
+      })),
     }));
-  }
+}
 }
