@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable, Inject } from '@nestjs/common';
 import { Neo4jService } from 'nest-neo4j';
-import { Record as Neo4jRecord } from 'neo4j-driver';
+import { QueryResult } from 'neo4j-driver';
 import { NEO4J_TOKEN } from '@/database/neode.provider';
 import Neode from 'neode';
 
@@ -11,8 +11,8 @@ export class InterviewService {
     @Inject(NEO4J_TOKEN) private readonly neode: Neode,
   ) {}
 
-  async findAll(): Promise<Neo4jRecord[]> {
-    const res = await this.neode.readCypher('MATCH (i:Interview) RETURN i', {});
+  async findAll() {
+    const res = await this.neo4jService.read('MATCH (i:Interview) RETURN i', {});
     return res.records.map(record => record.get('i'));
   }
 
@@ -108,4 +108,29 @@ export class InterviewService {
       interview: record.get('i'),
     }));
   }
+
+  async getInterviewQuestions(interviewId: string) {
+    const query = `
+      MATCH (i:Interview {id: $interviewId})-[:HAS_INTERVIEW_QUESTION]->(iq:InterviewQuestion)-[:REFERS_TO]->(q:Question)
+      RETURN q.id AS question_id, q.title AS question_title, q.weight AS question_weight
+      ORDER BY q.id
+    `;
+  
+    const params = { interviewId };
+    
+    const res: QueryResult = await this.neo4jService.read(query, params);
+  
+    if (!res.records.length) {
+      console.warn(`No questions to this interview ID: ${interviewId}`);
+      return [];
+    }
+  
+    return res.records.map(record => ({
+      id: record.get('question_id'),
+      title: record.get('question_title'),
+      weight: record.get('question_weight'),
+    }));
+  }
+  
+  
 }
