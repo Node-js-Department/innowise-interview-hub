@@ -1,38 +1,31 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 
-export interface Followup {
-    id: string;
-    tags: string[];
-    title: string;
-    weight: string;
-  }
+export interface IFollowup {
+  id: string,
+  tags: string[],
+  title: string,
+  weight: number,
+}
 
-  export type Tfollowup = {
-    id: string,
-    tags: string[],
-    title: string,
-    weight: string,
-  }
+export interface IQuestion {
+  id: string,
+  tags: string[],
+  title: string,
+  weight: number,
+  followUpQuestions: IFollowup[],
+}
 
-  export interface Question {
-    id: string;
-    tags: string[];
-    title: string;
-    weight: number;
-    followUpQuestions: Followup[];
-  }
-
-  export interface Theme {
-    id: string;
-    title: string;
-    questions: Map<string, Question>;
-  }
+export interface ITheme {
+  id: string,
+  title: string,
+  questions: Map<string, IQuestion>,
+}
 
 export interface ITopic {
   id: string,
   title: string,
-  themes: Map<string, Theme>,
+  themes: Map<string, ITheme>,
 }
 
 export interface IDomain {
@@ -61,3 +54,12 @@ export class UpdatedAnswerDTO {
   rate?: number;
 }
 
+
+  export type Tfollowup = {
+    id: string,
+    tags: string[],
+    title: string,
+    weight: string,
+  }
+
+ 
