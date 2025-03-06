@@ -1,16 +1,18 @@
+
 import * as fs from 'fs/promises';
 import path from 'path';
 
-import { Controller, Get, HttpException, HttpStatus, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, HttpException, HttpStatus, UploadedFile, UseInterceptors, Put } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 
 import { TAny } from '@packages/shared';
 
+import { QuestionsService } from './questions.service';
+import { UpdatedAnswerDTO } from './questions.dto';
 import { ExportService } from './export.service';
 import { ImportService } from './import.service';
-import { QuestionsService } from './questions.service';
 
 @ApiTags('questions')
 @Controller('questions')
@@ -19,6 +21,14 @@ export class QuestionsController {
     private readonly importService: ImportService,
     private readonly exportService: ExportService
   ) {}
+
+  @ApiOperation({ summary: 'Rate and comment on the candidate' })
+  @ApiResponse({ status: 404, description: 'Interviewer or InterviewQuestion not found!' })
+  @ApiOkResponse()
+  @Put('evaluate')
+  async takeEvaluated(@Body() dto: UpdatedAnswerDTO) {
+    return this.questionsService.takeEvaluatedQuestionsForInterview(dto);
+  }
 
   @Get()
   @ApiOperation({ summary: 'Get all questions (json)' })

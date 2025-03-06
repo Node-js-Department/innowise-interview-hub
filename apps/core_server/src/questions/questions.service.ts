@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { QueryResult } from 'neo4j-driver';
 import { Neo4jService } from 'nest-neo4j';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { QueryResult } from 'neo4j-driver';
 
 import { TAny } from '@packages/shared';
 
+import { UpdatedAnswerDTO } from './questions.dto';
 import { IDomain } from './questions.dto';
 
 @Injectable()
@@ -104,6 +105,26 @@ export class QuestionsService {
         })),
       })),
     };
+  }
+
+  async takeEvaluatedQuestionsForInterview(dto: UpdatedAnswerDTO) {
+    const query = `
+      MATCH (i:Interview {id: $interviewId})-[:HAS_INTERVIEW_QUESTION]-(q:InterviewQuestion {questionId: $questionId})
+      SET q.comment = $comment, q.rate = $rate
+      RETURN q
+    `;
+    const res: QueryResult = await this.neo4jService.write(query, {
+      interviewId: dto.interviewId, questionId: dto.questionId, comment: dto.comment, rate: dto.rate,
+    });
+
+    const result = res.records[0]?.get('q');
+    if (!result) {
+      throw new HttpException(
+        'Interviewer or InterviewQuestion not found!',
+        HttpStatus.NOT_FOUND
+      );
+    }
+    return res.records[0]?.get('q').properties;
   }
 }
 
