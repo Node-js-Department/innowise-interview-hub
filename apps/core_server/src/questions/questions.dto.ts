@@ -54,12 +54,19 @@ export class UpdatedAnswerDTO {
   rate?: number;
 }
 
+export class SkipQuetionDTO {
+  @ApiProperty({ type: String })
+  @IsString()
+  interviewId: string;
 
-  export type Tfollowup = {
-    id: string,
-    tags: string[],
-    title: string,
-    weight: string,
-  }
+  @ApiProperty({ type: String })
+  @IsString()
+  questionId: string;
+}
+export type TFollowup = {
+  id: string,
+  tags: string[],
+  title: string,
+  weight: string,
+};
 
- 

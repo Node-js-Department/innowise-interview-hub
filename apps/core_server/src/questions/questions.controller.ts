@@ -10,7 +10,7 @@ import { Response } from 'express';
 import { TAny } from '@packages/shared';
 
 import { QuestionsService } from './questions.service';
-import { UpdatedAnswerDTO } from './questions.dto';
+import { SkipQuetionDTO, UpdatedAnswerDTO } from './questions.dto';
 import { ExportService } from './export.service';
 import { ImportService } from './import.service';
 
@@ -20,7 +20,15 @@ export class QuestionsController {
   constructor(private readonly questionsService: QuestionsService,
     private readonly importService: ImportService,
     private readonly exportService: ExportService
-  ) {}
+  ) { }
+
+  @ApiOperation({ summary: 'Skip quetion' })
+  @ApiResponse({ status: 404, description: 'Interviewer or InterviewQuestion not found!' })
+  @ApiOkResponse()
+  @Put('skip')
+  async skip(@Body() dto: SkipQuetionDTO) {
+    return this.questionsService.skipQuetion(dto);
+  }
 
   @ApiOperation({ summary: 'Rate and comment on the candidate' })
   @ApiResponse({ status: 404, description: 'Interviewer or InterviewQuestion not found!' })
@@ -79,7 +87,6 @@ export class QuestionsController {
   async getFollowupQuestions(@Body('questionId') questionId: string) {
     return await this.questionsService.getFollowupQuestions(questionId);
   }
-
 
   @Post('import')
   @ApiOperation({ summary: 'Import file' })

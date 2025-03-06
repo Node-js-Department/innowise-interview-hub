@@ -4,7 +4,7 @@ import { QueryResult } from 'neo4j-driver';
 
 import { TAny } from '@packages/shared';
 
-import { UpdatedAnswerDTO } from './questions.dto';
+import { SkipQuetionDTO, UpdatedAnswerDTO } from './questions.dto';
 import { IDomain } from './questions.dto';
 
 @Injectable()
@@ -20,15 +20,15 @@ export class QuestionsService {
     ORDER BY followup.weight
   `;
 
-  const res = await this.neo4jService.read(query, { questionId });
+    const res = await this.neo4jService.read(query, { questionId });
 
-  return res.records.map(record => ({
-    id: record.get('id'),
-    title: record.get('title'),
-    weight: record.get('weight').toNumber(),
-  }));
+    return res.records.map(record => ({
+      id: record.get('id'),
+      title: record.get('title'),
+      weight: record.get('weight').toNumber(),
+    }));
   }
-  
+
   async findAll(): Promise<any> {
     const query = `
       MATCH (d:Domain)-[:HAS_TOPIC]->(t:Topic)
@@ -141,6 +141,25 @@ export class QuestionsService {
       );
     }
     return res.records[0]?.get('q').properties;
+  }
+
+  async skipQuetion(dto: SkipQuetionDTO) {
+    const query = `
+      MATCH (i:Interview {id: $interviewId})-[:HAS_INTERVIEW_QUESTION]-(q:InterviewQuestion {questionId: $questionId})
+      SET q.skip = true
+      RETURN q
+    `;
+
+    const res: QueryResult = await this.neo4jService.write(query, {
+      interviewId: dto.interviewId, questionId: dto.questionId,
+    });
+
+    if (!res.records[0]?.get('q')) {
+      throw new HttpException(
+        'Interviewer or InterviewQuestion not found!',
+        HttpStatus.NOT_FOUND
+      );
+    }
   }
 }
 
