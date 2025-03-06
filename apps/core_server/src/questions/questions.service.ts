@@ -20,15 +20,15 @@ export class QuestionsService {
     ORDER BY followup.weight
   `;
 
-  const res = await this.neo4jService.read(query, { questionId });
+    const res = await this.neo4jService.read(query, { questionId });
 
-  return res.records.map(record => ({
-    id: record.get('id'),
-    title: record.get('title'),
-    weight: record.get('weight').toNumber(),
-  }));
+    return res.records.map(record => ({
+      id: record.get('id'),
+      title: record.get('title'),
+      weight: record.get('weight').toNumber(),
+    }));
   }
-  
+
   async findAll(): Promise<any> {
     const query = `
       MATCH (d:Domain)-[:HAS_TOPIC]->(t:Topic)

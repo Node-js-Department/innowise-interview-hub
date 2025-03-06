@@ -63,7 +63,7 @@ export class SkipQuetionDTO {
   @IsString()
   questionId: string;
 }
-export type Tfollowup = {
+export type TFollowup = {
   id: string,
   tags: string[],
   title: string,
