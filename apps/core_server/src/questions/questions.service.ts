@@ -1,15 +1,11 @@
 import { Neo4jService } from 'nest-neo4j';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { QueryResult, Record as Neo4jRecord } from 'neo4j-driver';
-import { Domain, UpdatedAnswerDTO } from './questions.dto';
-
-import { Injectable } from '@nestjs/common';
-import { QueryResult } from 'neo4j-driver';
-import { Neo4jService } from 'nest-neo4j';
+import { UpdatedAnswerDTO } from './questions.dto';
 
 import { TAny } from '@packages/shared';
 
-import { IDomain } from './questions.dto';
+import { Domain } from './questions.dto';
 
 @Injectable()
 export class QuestionsService {
@@ -34,7 +30,7 @@ export class QuestionsService {
 
     const res: QueryResult = await this.neo4jService.read(query);
 
-    const domainsMap = new Map<string, IDomain>();
+    const domainsMap = new Map<string, Domain>();
 
     res.records.forEach(record => {
       const domainId = record.get('domain_id') as string;
