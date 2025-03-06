@@ -1,19 +1,19 @@
-
-import { Injectable } from '@nestjs/common';
-import { Neo4jService } from 'nest-neo4j';
-import { QueryResult, Record as Neo4jRecord } from 'neo4j-driver';
+import { Inject, Injectable } from '@nestjs/common';
+import { Record as Neo4jRecord } from 'neo4j-driver';
 import { v4 as uuidv4 } from 'uuid';
 
 import { CreateInterviewDTO } from './interview.dto';
+import { NEO4J_TOKEN } from '@/database/neode.provider';
+import Neode from 'neode';
 
 @Injectable()
 export class InterviewService {
   constructor(
-    private readonly neo4jService: Neo4jService
+    @Inject(NEO4J_TOKEN) private readonly neode: Neode
   ) {}
 
   async findAll(): Promise<Neo4jRecord[]> {
-    const res: QueryResult = await this.neo4jService.read('MATCH (i:Interview) RETURN i');
+    const res = await this.neode.readCypher('MATCH (i:Interview) RETURN i', {});
     return res.records.map(record => record.get('i'));
   }
 
@@ -38,7 +38,7 @@ export class InterviewService {
     };
 
     try {
-      const result: QueryResult = await this.neo4jService.write(query, params);
+      const result = await this.neode.writeCypher(query, params);
 
       const interview = result.records[0]?.get('i');
 
@@ -66,7 +66,7 @@ export class InterviewService {
 
     const params = { userId, interviewId };
 
-    const result = await this.neo4jService.write(query, params);
+    const result = await this.neode.writeCypher(query, params);
     return result.records.map(record => ({
       user: record.get('u'),
       interview: record.get('i'),
