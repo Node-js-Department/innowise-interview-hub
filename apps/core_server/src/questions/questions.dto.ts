@@ -54,3 +54,12 @@ export class UpdatedAnswerDTO {
   rate?: number;
 }
 
+
+  export type Tfollowup = {
+    id: string,
+    tags: string[],
+    title: string,
+    weight: string,
+  }
+
+ 

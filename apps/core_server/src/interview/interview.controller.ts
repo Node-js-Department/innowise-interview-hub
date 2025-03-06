@@ -1,7 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-
-import { CreateInterviewDto } from './interview.dto';
+import { Body, Controller, Get, Post, Req } from '@nestjs/common';
 import { InterviewService } from './interview.service';
+import { CreateInterviewDto } from './interview.dto';
 
 @Controller('interview')
 export class InterviewController {
@@ -22,4 +21,8 @@ export class InterviewController {
     );
   }
 
+  @Post('questions')
+  async getInterviewQuestions(@Body('interviewId') interviewId: string) {
+    return await this.interviewService.getInterviewQuestions(interviewId);
+  }
 }
