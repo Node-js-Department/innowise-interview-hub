@@ -18,7 +18,7 @@ const ProtectedLayout = async ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <>{ children }</>
+    children
   );
 };
 

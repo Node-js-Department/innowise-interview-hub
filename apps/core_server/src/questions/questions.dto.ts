@@ -8,25 +8,33 @@ export interface Followup {
     weight: number;
   }
 
-  export interface Question {
-    id: string;
-    tags: string[];
-    title: string;
-    weight: number;
-    followUpQuestions: Followup[];
-  }
+export interface IFollowup {
+  id: string,
+  tags: string[],
+  title: string,
+  weight: number,
+}
 
-  export interface Theme {
-    id: string;
-    title: string;
-    questions: Map<string, Question>;
-  }
 
-  export interface Topic {
-    id: string;
-    title: string;
-    themes: Map<string, Theme>;
-  }
+export interface IQuestion {
+  id: string,
+  tags: string[],
+  title: string,
+  weight: number,
+  followUpQuestions: IFollowup[],
+}
+
+export interface ITheme {
+  id: string,
+  title: string,
+  questions: Map<string, IQuestion>,
+}
+
+export interface ITopic {
+  id: string,
+  title: string,
+  themes: Map<string, ITheme>,
+}
 
   export interface Domain {
     id: string;
@@ -54,4 +62,10 @@ export class UpdatedAnswerDTO {
   rate?: number;
 }
 
+
+export interface IDomain {
+  id: string,
+  title: string,
+  topics: Map<string, ITopic>,
+}
 

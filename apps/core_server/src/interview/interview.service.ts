@@ -1,14 +1,15 @@
 import { HttpException, HttpStatus, Injectable, Inject } from '@nestjs/common';
 import { Neo4jService } from 'nest-neo4j';
 import { Record as Neo4jRecord } from 'neo4j-driver';
-import { NEO4J_TOKEN } from '@/database/neode.provider';
 import Neode from 'neode';
+
+import { NEO4J_TOKEN } from '@/database/neode.provider';
 
 @Injectable()
 export class InterviewService {
   constructor(
     private readonly neo4jService: Neo4jService,
-    @Inject(NEO4J_TOKEN) private readonly neode: Neode,
+    @Inject(NEO4J_TOKEN) private readonly neode: Neode
   ) {}
 
   async findAll(): Promise<Neo4jRecord[]> {
@@ -20,17 +21,17 @@ export class InterviewService {
     interviewerId: string,
     candidateId: string,
     questions: string[],
-    timeDuration: string,
+    timeDuration: string
   ) {
 
     const interviewerRes = await this.neo4jService.read(
-      `MATCH (m:User {id: $interviewerId, role: 'Interviewer'}) RETURN m`,
-      { interviewerId },
+      'MATCH (m:User {id: $interviewerId, role: \'Interviewer\'}) RETURN m',
+      { interviewerId }
     );
 
     const candidateRes = await this.neo4jService.read(
-      `MATCH (s:User {id: $candidateId, role: 'Candidate'}) RETURN s`,
-      { candidateId },
+      'MATCH (s:User {id: $candidateId, role: \'Candidate\'}) RETURN s',
+      { candidateId }
     );
 
     const interviewer = interviewerRes.records[0]?.get('m') || null;
@@ -39,7 +40,7 @@ export class InterviewService {
     if (!interviewer || !candidate) {
       throw new HttpException(
         'Interviewer or candidate not found!',
-        HttpStatus.NOT_FOUND,
+        HttpStatus.NOT_FOUND
       );
     }
 
@@ -49,7 +50,7 @@ export class InterviewService {
       WHERE q.id IN $questionIds
       RETURN collect(q.id) AS existingQuestionIds
       `,
-      { questionIds: questions },
+      { questionIds: questions }
     );
 
     const existingQuestionIds = questionCheckRes.records[0]?.get('existingQuestionIds') || [];
@@ -58,14 +59,14 @@ export class InterviewService {
     if (missingQuestions.length > 0) {
       throw new HttpException(
         `Some questions not found: ${missingQuestions.join(', ')}`,
-        HttpStatus.NOT_FOUND,
+        HttpStatus.NOT_FOUND
       );
     }
 
     const interviewId = `interview_${Date.now()}`;
 
     const interviewRes = await this.neo4jService.write(
-       `
+      `
       CREATE (i:Interview {id: $interviewId, duration: $duration, createdAt: timestamp()})
       WITH i
       MATCH (m:User {id: $interviewerId, role: 'Interviewer'})
@@ -87,7 +88,7 @@ export class InterviewService {
         interviewerId,
         candidateId,
         questions,
-      },
+      }
     );
 
     return interviewRes.records[0]?.get('i');
@@ -100,7 +101,7 @@ export class InterviewService {
       MERGE (u)-[:PARTICIPATES_IN]->(i)
       RETURN u, i
       `,
-      { userId, interviewId },
+      { userId, interviewId }
     );
 
     return result.records.map(record => ({

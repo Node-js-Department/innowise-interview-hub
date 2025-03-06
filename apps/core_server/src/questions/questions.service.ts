@@ -3,13 +3,21 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { QueryResult, Record as Neo4jRecord } from 'neo4j-driver';
 import { Domain, UpdatedAnswerDTO } from './questions.dto';
 
+import { Injectable } from '@nestjs/common';
+import { QueryResult } from 'neo4j-driver';
+import { Neo4jService } from 'nest-neo4j';
+
+import { TAny } from '@packages/shared';
+
+import { IDomain } from './questions.dto';
+
 @Injectable()
 export class QuestionsService {
   constructor(
-    private readonly neo4jService: Neo4jService,
+    private readonly neo4jService: Neo4jService
   ) {}
 
-  async findAll(): Promise<any> {
+  async findAll(): Promise<TAny> {
     const query = `
       MATCH (d:Domain)-[:HAS_TOPIC]->(t:Topic)
       OPTIONAL MATCH (t)-[:HAS_THEME]->(th:Theme)
@@ -26,8 +34,7 @@ export class QuestionsService {
 
     const res: QueryResult = await this.neo4jService.read(query);
 
-   
-    const domainsMap = new Map<string, Domain>();
+    const domainsMap = new Map<string, IDomain>();
 
     res.records.forEach(record => {
       const domainId = record.get('domain_id') as string;
@@ -77,8 +84,8 @@ export class QuestionsService {
         const followups = record.get('followups') ?? [];
 
         question.followUpQuestions = followups
-          .filter((fq: any) => fq && fq.properties)
-          .map((fq: any) => ({
+          .filter((fq: TAny) => fq && fq.properties)
+          .map((fq: TAny) => ({
             id: fq.properties.id,
             title: fq.properties.title,
             weight: fq.properties.weight.toNumber(),
@@ -103,6 +110,7 @@ export class QuestionsService {
       })),
     };
   }
+
   async takeEvaluatedQuestionsForInterview(dto: UpdatedAnswerDTO) {
     const query = `
       MATCH (i:Interview {id: $interviewId})-[:HAS_INTERVIEW_QUESTION]-(q:InterviewQuestion {questionId: $questionId})

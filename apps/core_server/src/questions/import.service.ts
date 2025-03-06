@@ -1,16 +1,19 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import axios from 'axios';
 import * as fs from 'fs/promises';
 import path from 'path';
+
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
+
+import { TAny } from '@packages/shared';
 
 @Injectable()
 export class ImportService {
-   constructor(
-          private readonly configService: ConfigService,
-      ){}
-      
-  async importDataStatic(): Promise<any> {
+  constructor(
+    private readonly configService: ConfigService
+  ) {}
+
+  async importDataStatic(): Promise<TAny> {
     try {
 
       const filePath = path.resolve(__dirname, '../../importJson/q.json');
@@ -19,10 +22,10 @@ export class ImportService {
       const jsonData = JSON.parse(fileContent);
 
       const url = this.configService.get('DB_IMPORT_URL');
-      if(!url){
+      if (!url) {
         throw new HttpException('DB_IMPORT_URL is not defined', HttpStatus.INTERNAL_SERVER_ERROR);
       }
-      
+
       const response = await axios.post(url, jsonData, {
         headers: {
           'Content-Type': 'application/json',
@@ -36,7 +39,7 @@ export class ImportService {
     }
   }
 
-  async importDataDynamic(filePath: string): Promise<any> {
+  async importDataDynamic(filePath: string): Promise<TAny> {
     try {
       await fs.access(filePath);
 
@@ -44,7 +47,7 @@ export class ImportService {
       const jsonData = JSON.parse(fileContent);
 
       const url = this.configService.get('DB_IMPORT_URL');
-      if(!url){
+      if (!url) {
         throw new HttpException('DB_IMPORT_URL is not defined', HttpStatus.INTERNAL_SERVER_ERROR);
       }
       const response = await axios.post(url, jsonData, {
@@ -57,8 +60,8 @@ export class ImportService {
 
       return response.data;
     } catch (error: unknown) {
-      console.error('import error',error)
+      console.error('import error', error);
       throw new HttpException(`Import error: ${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
-    }  
+    }
   }
 }
