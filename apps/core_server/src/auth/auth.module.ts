@@ -26,10 +26,10 @@ import { UserModule } from '@/user/user.module';
   providers: [
     GoogleStrategy,
     AuthService,
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AuthGuard,
+    // },
   ],
   controllers: [AuthController],
 })

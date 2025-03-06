@@ -112,32 +112,88 @@ export class InterviewService {
 
   async getInterviewQuestions(interviewId: string) {
     const query = `
-      MATCH (i:Interview {id: "interview_1741252701545"})-[:HAS_INTERVIEW_QUESTION]->(iq:InterviewQuestion)-[:REFERS_TO]->(q:Question)
-    OPTIONAL MATCH (q)-[:HAS_FOLLOWUP]->(followup:FollowUpQuestion)
-    WITH q, collect(followup) AS followups
-    RETURN q.id AS question_id, q.title AS question_title, q.weight AS question_weight,
-    [f IN followups | {id: f.id, title: f.title, weight: f.weight}] AS followup_questions
-    ORDER BY q.weight
+      MATCH (i:Interview {id: $interviewId})-[:HAS_INTERVIEW_QUESTION]->(iq:InterviewQuestion)-[:REFERS_TO]->(q:Question)
+      OPTIONAL MATCH (q)-[:HAS_FOLLOWUP]->(followup:FollowUpQuestion)
+      WITH q, followup
+      ORDER BY q.weight, followup.weight
+      WITH q, collect({id: followup.id, title: followup.title, weight: followup.weight}) AS followups
+      RETURN q.id AS question_id, 
+             q.title AS question_title, 
+             q.weight AS question_weight,
+             followups;
     `;
-  
+
     const params = { interviewId };
-  
+
     const res: QueryResult = await this.neo4jService.read(query, params);
-  
+
     if (!res.records.length) {
       console.warn(`No questions found for interview ID: ${interviewId}`);
       return [];
     }
-  
+
     return res.records.map(record => ({
       id: record.get('question_id'),
       title: record.get('question_title'),
       weight: record.get('question_weight').toNumber(),
-      followupQuestions: record.get('followup_questions').map((f:Tfollowup) => ({
+      followupQuestions: (record.get('followups') || []).map((f: Tfollowup) => ({
         id: f.id,
         title: f.title,
         weight: +f.weight.toString(),
       })),
     }));
+}
+
+
+  async getInterviewResults(interviewId: string) {
+    const query = `
+    MATCH (i:Interview {id: $interviewId})
+MATCH (i)-[:HAS_INTERVIEW_QUESTION]->(iq:InterviewQuestion)-[:REFERS_TO]->(q:Question)
+OPTIONAL MATCH (q)-[:HAS_FOLLOWUP]->(f:FollowUpQuestion)
+
+RETURN 
+  i.id AS interviewId,
+  i.duration AS interviewDuration,
+  i.date AS interviewDate,
+  SUM(iq.rate) AS totalScore,  
+  AVG(iq.rate) AS avgScore,
+  COUNT(DISTINCT q) AS totalQuestions,
+  COUNT(DISTINCT f) AS totalFollowQuestions;
+  COUNT(DISTINCT CASE WHEN q.isskip = true THEN q END) AS skippedQuestions,  
+  COUNT(DISTINCT CASE WHEN f.isskip = true THEN f END) AS skippedFollowQuestions;
+  `;
+
+  const params = { interviewId };
+
+  const res: QueryResult = await this.neo4jService.read(query, params);
+
+  if (!res.records.length) {
+    throw new Error(`Interview ${interviewId} not found`);
+  }
+
+  const record = res.records[0];
+  const interviewIdResult: string = record.get('interviewId');
+  const interviewDuration: string = record.get('interviewDuration');
+  const interviewDate: string =  record.get('date')
+  const avgScore: number = +record.get('avgScore').toString();
+  const totalQuestions: number = +record.get('totalQuestions').toString();
+  const totalFollowQuestions: number = +record.get('totalFollowQuestions').toString();
+  // const time = interviewDate - interviewDuration;
+  const skippedQuestions: number = +record.get('skippedQuestions').toString();
+  const skippedFollowQuestions: number = +record.get('skippedFollowQuestions').toString();
+  const countPrimary = totalQuestions - skippedQuestions;
+  const countFollowUp = totalFollowQuestions - skippedFollowQuestions;
+
+
+  return {
+      interviewId: interviewIdResult,
+      interviewDate,
+      avgScore,
+      totalQuestions,
+      totalFollowQuestions,
+      // time,
+      countPrimary: `${countPrimary}/${totalQuestions}`,
+      countFollowUp: `${countFollowUp}/${totalFollowQuestions}`,
+  };
 }
 }
