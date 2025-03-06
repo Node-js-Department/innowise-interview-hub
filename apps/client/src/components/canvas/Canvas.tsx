@@ -41,6 +41,8 @@ export const Canvas = ({ nodes: allNodes }: ICanvasProps) => {
     initialEdges
   );
 
+  const proOptions = { hideAttribution: true }
+
   const nodeTypes = useMemo(
     () => ({
       domainNode: DomainNode,
@@ -148,7 +150,7 @@ export const Canvas = ({ nodes: allNodes }: ICanvasProps) => {
   // );
 
   return (
-    <div style={{ width: "100vw", height: "calc(100vh - 72px)" }}>
+    <div style={{height: "100%" }} className=" w-full p-1 h-[calc(100%-12px)]">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -162,6 +164,7 @@ export const Canvas = ({ nodes: allNodes }: ICanvasProps) => {
         fitView
         minZoom={0.2}
         maxZoom={4}
+        proOptions={proOptions}
       />
       <Controls />
       {/* <Panel position='top-right'>
