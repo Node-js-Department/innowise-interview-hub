@@ -3,6 +3,7 @@ import axios from 'axios';
 const api = axios.create({
   baseURL: `http://${process.env.NEXT_PUBLIC_CORE_SERVICE_HOST}:${process.env.NEXT_PUBLIC_CORE_SERVICE_PORT}/api`,
   timeout: 5000,
+  withCredentials: true,
 });
 
 api.interceptors.request.use(
