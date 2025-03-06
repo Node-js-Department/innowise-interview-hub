@@ -1,31 +1,38 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 
-export interface IFollowup {
-  id: string,
-  tags: string[],
-  title: string,
-  weight: number,
-}
+export interface Followup {
+    id: string;
+    tags: string[];
+    title: string;
+    weight: string;
+  }
 
-export interface IQuestion {
-  id: string,
-  tags: string[],
-  title: string,
-  weight: number,
-  followUpQuestions: IFollowup[],
-}
+  export type Tfollowup = {
+    id: string,
+    tags: string[],
+    title: string,
+    weight: string,
+  }
 
-export interface ITheme {
-  id: string,
-  title: string,
-  questions: Map<string, IQuestion>,
-}
+  export interface Question {
+    id: string;
+    tags: string[];
+    title: string;
+    weight: number;
+    followUpQuestions: Followup[];
+  }
+
+  export interface Theme {
+    id: string;
+    title: string;
+    questions: Map<string, Question>;
+  }
 
 export interface ITopic {
   id: string,
   title: string,
-  themes: Map<string, ITheme>,
+  themes: Map<string, Theme>,
 }
 
 export interface IDomain {
