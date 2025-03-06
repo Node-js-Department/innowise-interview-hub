@@ -61,6 +61,12 @@ export class QuestionsController {
     }
   }
 
+  @Post('followup')
+  async getFollowupQuestions(@Body('questionId') questionId: string) {
+    return await this.questionsService.getFollowupQuestions(questionId);
+  }
+
+
   @Post('import')
   @ApiOperation({ summary: 'Import file' })
   @ApiConsumes('multipart/form-data')

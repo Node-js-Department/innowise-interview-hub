@@ -9,6 +9,22 @@ export class QuestionsService {
     private readonly neo4jService: Neo4jService,
   ) {}
 
+  async getFollowupQuestions(questionId: string) {
+    const query = `
+    MATCH (q:Question {id: $questionId})-[:HAS_FOLLOWUP]->(followup:FollowUpQuestion)
+    RETURN followup.id AS id, followup.title AS title, followup.weight AS weight
+    ORDER BY followup.id
+  `;
+
+  const res = await this.neo4jService.read(query, { questionId });
+
+  return res.records.map(record => ({
+    id: record.get('id'),
+    title: record.get('title'),
+    weight: record.get('weight'),
+  }));
+  }
+  
   async findAll(): Promise<any> {
     const query = `
       MATCH (d:Domain)-[:HAS_TOPIC]->(t:Topic)

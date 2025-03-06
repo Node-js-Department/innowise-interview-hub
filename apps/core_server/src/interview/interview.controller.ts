@@ -25,6 +25,4 @@ export class InterviewController {
   async getInterviewQuestions(@Body('interviewId') interviewId: string) {
     return await this.interviewService.getInterviewQuestions(interviewId);
   }
-  
-
 }

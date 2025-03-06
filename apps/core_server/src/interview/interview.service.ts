@@ -131,6 +131,4 @@ export class InterviewService {
       weight: record.get('question_weight'),
     }));
   }
-  
-  
 }
