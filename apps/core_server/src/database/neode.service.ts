@@ -8,7 +8,7 @@ import { EUserRole } from '@/common/models';
 @Injectable()
 export abstract class BaseNeodeService<T, CreateDto = Partial<T>, UpdateDto = Partial<T>> {
   private readonly logger = new Logger(BaseNeodeService.name);
-  private modelName: string;
+  protected modelName: string;
   constructor(
     @Inject(NEO4J_TOKEN) protected readonly neode: Neode,
     modelName: string
