@@ -113,7 +113,7 @@ export class InterviewService {
     const query = `
       MATCH (i:Interview {id: $interviewId})-[:HAS_INTERVIEW_QUESTION]->(iq:InterviewQuestion)-[:REFERS_TO]->(q:Question)
       RETURN q.id AS question_id, q.title AS question_title, q.weight AS question_weight
-      ORDER BY q.id
+      ORDER BY q.weight
     `;
   
     const params = { interviewId };
@@ -128,7 +128,7 @@ export class InterviewService {
     return res.records.map(record => ({
       id: record.get('question_id'),
       title: record.get('question_title'),
-      weight: record.get('question_weight'),
+      weight: record.get('question_weight').toNumber(),
     }));
   }
 }

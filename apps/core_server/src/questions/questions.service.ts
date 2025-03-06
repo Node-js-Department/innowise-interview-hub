@@ -13,7 +13,7 @@ export class QuestionsService {
     const query = `
     MATCH (q:Question {id: $questionId})-[:HAS_FOLLOWUP]->(followup:FollowUpQuestion)
     RETURN followup.id AS id, followup.title AS title, followup.weight AS weight
-    ORDER BY followup.id
+    ORDER BY followup.weight
   `;
 
   const res = await this.neo4jService.read(query, { questionId });
@@ -21,7 +21,7 @@ export class QuestionsService {
   return res.records.map(record => ({
     id: record.get('id'),
     title: record.get('title'),
-    weight: record.get('weight'),
+    weight: record.get('weight').toNumber(),
   }));
   }
   
