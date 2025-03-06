@@ -2,8 +2,9 @@
 
 import { RouteChangesProvider } from 'nextjs-router-events';
 import React from 'react';
-
 import './style.css';
+import { ReactFlowProvider } from '@xyflow/react';
+
 import { getLocale } from '@/i18next/client';
 import { LocaleProvider } from '@/hooks/locale-provider';
 
@@ -26,7 +27,7 @@ const RootLayout = ({
         <RouteChangesProvider>
           <main>
             <LocaleProvider value={locale}>
-              {children}
+              <ReactFlowProvider>{children}</ReactFlowProvider>
             </LocaleProvider>
           </main>
         </RouteChangesProvider>
