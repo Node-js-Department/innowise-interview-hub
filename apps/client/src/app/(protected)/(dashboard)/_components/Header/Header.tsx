@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { BreadcrumbHeader } from '@/app/(protected)/(dashboard)/_components/Header/Breadcrumb';
-import { AccountLabel } from '@/app/(protected)/(dashboard)/_components/Header/AccountLabel';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { BreadcrumbHeader } from '@/app/(protected)/(dashboard)/_components/Header/Breadcrumb';
+import { AccountLabel } from '@/app/(protected)/(dashboard)/_components/Header/AccountLabel';
 import Logo from '@/public/icons/logo.svg';
 
 type THeaderProps = {

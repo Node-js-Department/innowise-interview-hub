@@ -1,6 +1,7 @@
 import React from 'react';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+
 import { isTokenValid } from '@/lib/actions';
 
 const ProtectedLayout = async ({ children }: { children: React.ReactNode }) => {
@@ -17,9 +18,7 @@ const ProtectedLayout = async ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <>
-      {children}
-    </>
+    { children }
   );
 };
 
