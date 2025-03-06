@@ -39,7 +39,7 @@ export class QuestionsController {
       }
     } catch(error){
       console.error('Export error', error);
-      throw new Error('Export error');
+      throw new HttpException(`Export error: ${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
   }
@@ -57,7 +57,7 @@ export class QuestionsController {
       }
     } catch (error) {
       console.error(' Import error:', error);
-      throw new Error('Emport error')
+      throw new HttpException(`Import error: ${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -97,7 +97,7 @@ export class QuestionsController {
       };
     } catch (error) {
       console.error('Upload error', error);
-      throw new HttpException(' Upload error', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(`Upload error: ${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

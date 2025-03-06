@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
@@ -13,7 +14,7 @@ export class ExportService {
     try{
         const url = this.configService.get('DB_EXPORT_URL');
         if(!url){
-            throw new Error('DB_EXPORT_URL is not defined');
+          throw new HttpException('DB_EXPORT_URL is not defined', HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         const { data } = await axios.get(url, {
@@ -26,7 +27,7 @@ export class ExportService {
         const date = new Date().toISOString().replace(/:/g, '-').split('.')[0];
         const filename = `${date}-exported_data.json`;
 
-        res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Content-Type', 'application/json');
       res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
       res.flushHeaders();
       data.pipe(res);
@@ -34,7 +35,7 @@ export class ExportService {
 
     } catch( error ) {
         console.error('Export error', error);
-        throw new Error('Cant export');
+        throw new HttpException(`Cant export: ${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
  }
 }

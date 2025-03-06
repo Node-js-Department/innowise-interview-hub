@@ -1,9 +1,8 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-
+import { Body, Controller, Get, Post, Req } from '@nestjs/common';
 import { InterviewService } from './interview.service';
-import { CreateInterviewDTO } from './interview.dto';
+import { CreateInterviewDto } from './interview.dto';
 
-@Controller('interviews')
+@Controller('interview')
 export class InterviewController {
   constructor(private readonly interviewService: InterviewService) { }
 
@@ -12,8 +11,15 @@ export class InterviewController {
     return this.interviewService.findAll();
   }
 
-  @Post()
-  createInterviews(@Body() dto: CreateInterviewDTO) {
-    return this.interviewService.createInterview(dto);
+  @Post('create')
+  async startInterview(@Body() createInterviewDto: CreateInterviewDto) {
+    return await this.interviewService.createInterview(
+      createInterviewDto.interviewerId,
+      createInterviewDto.candidateId,
+      createInterviewDto.questions,
+      createInterviewDto.timeDuration
+    );
   }
+
+
 }

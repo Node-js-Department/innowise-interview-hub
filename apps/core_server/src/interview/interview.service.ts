@@ -1,15 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Inject } from '@nestjs/common';
+import { Neo4jService } from 'nest-neo4j';
 import { Record as Neo4jRecord } from 'neo4j-driver';
-import { v4 as uuidv4 } from 'uuid';
-
-import { CreateInterviewDTO } from './interview.dto';
 import { NEO4J_TOKEN } from '@/database/neode.provider';
 import Neode from 'neode';
 
 @Injectable()
 export class InterviewService {
   constructor(
-    @Inject(NEO4J_TOKEN) private readonly neode: Neode
+    private readonly neo4jService: Neo4jService,
+    @Inject(NEO4J_TOKEN) private readonly neode: Neode,
   ) {}
 
   async findAll(): Promise<Neo4jRecord[]> {
@@ -17,60 +16,96 @@ export class InterviewService {
     return res.records.map(record => record.get('i'));
   }
 
-  async createInterview(dto: CreateInterviewDTO) {
-    const query = `
-      CREATE (i:Interview {
-        id: $id,
-        score: $score,
-        interviewDate: timestamp(),
-        followUpCount: $followUpCount,
-        questionCount: $questionCount,
-        level: $level,
-        createdAt: timestamp(),
-        updatedAt: timestamp()
-      })
-      RETURN i
-    `;
+  async createInterview(
+    interviewerId: string,
+    candidateId: string,
+    questions: string[],
+    timeDuration: string,
+  ) {
 
-    const params = {
-      ...dto,
-      id: uuidv4(),
-    };
+    const interviewerRes = await this.neo4jService.read(
+      `MATCH (m:User {id: $interviewerId, role: 'Interviewer'}) RETURN m`,
+      { interviewerId },
+    );
 
-    try {
-      const result = await this.neode.writeCypher(query, params);
+    const candidateRes = await this.neo4jService.read(
+      `MATCH (s:User {id: $candidateId, role: 'Candidate'}) RETURN s`,
+      { candidateId },
+    );
 
-      const interview = result.records[0]?.get('i');
+    const interviewer = interviewerRes.records[0]?.get('m') || null;
+    const candidate = candidateRes.records[0]?.get('s') || null;
 
-      if (interview) {
-        const interviewData = interview.properties;
-        return {
-          ...interviewData,
-          interviewDate: new Date(interviewData.interviewDate.low).toISOString(),
-          createdAt: new Date(interviewData.createdAt.low).toISOString(),
-          updatedAt: new Date(interviewData.updatedAt.low).toISOString(),
-        };
-      }
-    } catch (error) {
-      console.error('Error creating interview:', error);
-      throw new Error('Error creating interview');
+    if (!interviewer || !candidate) {
+      throw new HttpException(
+        'Interviewer or candidate not found!',
+        HttpStatus.NOT_FOUND,
+      );
     }
+
+    const questionCheckRes = await this.neo4jService.read(
+      `
+      MATCH (q:Question)
+      WHERE q.id IN $questionIds
+      RETURN collect(q.id) AS existingQuestionIds
+      `,
+      { questionIds: questions },
+    );
+
+    const existingQuestionIds = questionCheckRes.records[0]?.get('existingQuestionIds') || [];
+    const missingQuestions = questions.filter(id => !existingQuestionIds.includes(id));
+
+    if (missingQuestions.length > 0) {
+      throw new HttpException(
+        `Some questions not found: ${missingQuestions.join(', ')}`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    const interviewId = `interview_${Date.now()}`;
+
+    const interviewRes = await this.neo4jService.write(
+       `
+      CREATE (i:Interview {id: $interviewId, duration: $duration, createdAt: timestamp()})
+      WITH i
+      MATCH (m:User {id: $interviewerId, role: 'Interviewer'})
+      MATCH (s:User {id: $candidateId, role: 'Candidate'})
+      MERGE (m)-[:HAS_INTERVIEW]->(i)
+      MERGE (s)-[:HAS_INTERVIEW]->(i)
+      WITH i
+      UNWIND $questions AS questionId
+        MATCH (q:Question {id: questionId})
+        CREATE (iq:InterviewQuestion {questionId: questionId, rate: 0, comment: ''})
+        MERGE (i)-[:HAS_INTERVIEW_QUESTION]->(iq)
+        MERGE (iq)-[:REFERS_TO]->(q)
+      RETURN i
+
+      `,
+      {
+        interviewId,
+        duration: timeDuration,
+        interviewerId,
+        candidateId,
+        questions,
+      },
+    );
+
+    return interviewRes.records[0]?.get('i');
   }
 
   async linkUserToInterview(userId: string, interviewId: string) {
-    const query = `
-    MATCH (u:User {id: $userId}), (i:Interview {id: $interviewId})
-    MERGE (u)-[:PARTICIPATES_IN]->(i)
-    RETURN u, i
-  `;
+    const result = await this.neode.writeCypher(
+      `
+      MATCH (u:User {id: $userId}), (i:Interview {id: $interviewId})
+      MERGE (u)-[:PARTICIPATES_IN]->(i)
+      RETURN u, i
+      `,
+      { userId, interviewId },
+    );
 
-    const params = { userId, interviewId };
-
-    const result = await this.neode.writeCypher(query, params);
     return result.records.map(record => ({
       user: record.get('u'),
       interview: record.get('i'),
     }));
   }
-
 }

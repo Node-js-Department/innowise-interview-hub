@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import axios from 'axios';
 import * as fs from 'fs/promises';
 import path from 'path';
@@ -13,14 +13,14 @@ export class ImportService {
   async importDataStatic(): Promise<any> {
     try {
 
-      const filePath = path.resolve(process.cwd(), '/importJson/q.json');
+      const filePath = path.resolve(__dirname, '../../importJson/q.json');
       const fileContent = await fs.readFile(filePath, { encoding: 'utf-8' });
 
       const jsonData = JSON.parse(fileContent);
 
       const url = this.configService.get('DB_IMPORT_URL');
       if(!url){
-        throw new Error('DB_IMPORT_URL is not defined')
+        throw new HttpException('DB_IMPORT_URL is not defined', HttpStatus.INTERNAL_SERVER_ERROR);
       }
       
       const response = await axios.post(url, jsonData, {
@@ -32,7 +32,7 @@ export class ImportService {
       return response.data;
     } catch (error) {
       console.error('import error', error);
-      throw new Error('cant import');
+      throw new HttpException(`Cant import: ${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -45,7 +45,7 @@ export class ImportService {
 
       const url = this.configService.get('DB_IMPORT_URL');
       if(!url){
-        throw new Error('DB_IMPORT_URL is not defined')
+        throw new HttpException('DB_IMPORT_URL is not defined', HttpStatus.INTERNAL_SERVER_ERROR);
       }
       const response = await axios.post(url, jsonData, {
         headers: {
@@ -57,13 +57,8 @@ export class ImportService {
 
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error('Import error', error.message);
-      } else {
-        console.error('Unknown error', error);
-      }
-      throw new Error('Import error');
-    }
-    
+      console.error('import error',error)
+      throw new HttpException(`Import error: ${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }  
   }
 }
