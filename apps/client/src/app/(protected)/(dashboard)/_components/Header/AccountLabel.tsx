@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import angle from '@/public/icons/angle-down.svg';
+import { handleLogout } from '@/lib/actions';
 
 type TAccountLabelProps = {
   pictureUrl: string,
@@ -64,7 +65,9 @@ export const AccountLabel = ({ pictureUrl, fallback, username, position }: TAcco
             <input type='checkbox' className='ml-2' />
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleLogout()}>
+            Logout
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
