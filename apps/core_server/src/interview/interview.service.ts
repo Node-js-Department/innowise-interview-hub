@@ -76,7 +76,7 @@ export class InterviewService {
       WITH i
       UNWIND $questions AS questionId
         MATCH (q:Question {id: questionId})
-        CREATE (iq:InterviewQuestion {questionId: questionId, rate: 0, comment: ''})
+        CREATE (iq:InterviewQuestion {questionId: questionId, rate: 0, comment: '', skip: false})
         MERGE (i)-[:HAS_INTERVIEW_QUESTION]->(iq)
         MERGE (iq)-[:REFERS_TO]->(q)
       RETURN i
@@ -92,21 +92,5 @@ export class InterviewService {
     );
 
     return interviewRes.records[0]?.get('i');
-  }
-
-  async linkUserToInterview(userId: string, interviewId: string) {
-    const result = await this.neode.writeCypher(
-      `
-      MATCH (u:User {id: $userId}), (i:Interview {id: $interviewId})
-      MERGE (u)-[:PARTICIPATES_IN]->(i)
-      RETURN u, i
-      `,
-      { userId, interviewId }
-    );
-
-    return result.records.map(record => ({
-      user: record.get('u'),
-      interview: record.get('i'),
-    }));
   }
 }
