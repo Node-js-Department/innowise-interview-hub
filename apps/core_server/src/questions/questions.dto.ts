@@ -54,6 +54,7 @@ export class UpdatedAnswerDTO {
   rate?: number;
 }
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export type Tfollowup = {
   id: string,
   tags: string[],

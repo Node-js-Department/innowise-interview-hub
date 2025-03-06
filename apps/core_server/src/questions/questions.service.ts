@@ -2,7 +2,9 @@ import { Neo4jService } from 'nest-neo4j';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { QueryResult } from 'neo4j-driver';
 
-import { UpdatedAnswerDTO, tFollowup } from './questions.dto';
+import { TAny } from '@packages/shared';
+
+import { UpdatedAnswerDTO } from './questions.dto';
 import { IDomain } from './questions.dto';
 
 @Injectable()
@@ -27,7 +29,7 @@ export class QuestionsService {
     }));
   }
 
-  async findAll(): Promise<any> {
+  async findAll() {
     const query = `
       MATCH (d:Domain)-[:HAS_TOPIC]->(t:Topic)
       OPTIONAL MATCH (t)-[:HAS_THEME]->(th:Theme)
@@ -94,8 +96,8 @@ export class QuestionsService {
         const followups = record.get('followups') ?? [];
 
         question.followUpQuestions = followups
-          .filter((fq: Tfollowup) => fq && fq.properties)
-          .map((fq: Tfollowup) => ({
+          .filter((fq: TAny) => fq && fq.properties)
+          .map((fq: TAny) => ({
             id: fq.properties.id,
             title: fq.properties.title,
             weight: fq.properties.weight.toNumber(),
