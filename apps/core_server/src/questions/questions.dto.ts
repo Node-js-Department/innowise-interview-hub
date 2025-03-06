@@ -54,8 +54,6 @@ export class UpdatedAnswerDTO {
   rate?: number;
 }
 
-
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export class SkipQuetionDTO {
   @ApiProperty({ type: String })
   @IsString()
@@ -65,7 +63,7 @@ export class SkipQuetionDTO {
   @IsString()
   questionId: string;
 }
-export type Tfollowup = {
+export type TFollowup = {
   id: string,
   tags: string[],
   title: string,
