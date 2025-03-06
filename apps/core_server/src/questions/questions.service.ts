@@ -1,11 +1,11 @@
 import { Neo4jService } from 'nest-neo4j';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { QueryResult, Record as Neo4jRecord } from 'neo4j-driver';
-import { UpdatedAnswerDTO } from './questions.dto';
+import { QueryResult } from 'neo4j-driver';
 
 import { TAny } from '@packages/shared';
 
-import { Domain } from './questions.dto';
+import { UpdatedAnswerDTO } from './questions.dto';
+import { IDomain } from './questions.dto';
 
 @Injectable()
 export class QuestionsService {
@@ -30,7 +30,7 @@ export class QuestionsService {
 
     const res: QueryResult = await this.neo4jService.read(query);
 
-    const domainsMap = new Map<string, Domain>();
+    const domainsMap = new Map<string, IDomain>();
 
     res.records.forEach(record => {
       const domainId = record.get('domain_id') as string;
@@ -112,18 +112,18 @@ export class QuestionsService {
       MATCH (i:Interview {id: $interviewId})-[:HAS_INTERVIEW_QUESTION]-(q:InterviewQuestion {questionId: $questionId})
       SET q.comment = $comment, q.rate = $rate
       RETURN q
-    `
+    `;
     const res: QueryResult = await this.neo4jService.write(query, {
-      interviewId: dto.interviewId, questionId: dto.questionId, comment: dto.comment, rate: dto.rate
+      interviewId: dto.interviewId, questionId: dto.questionId, comment: dto.comment, rate: dto.rate,
     });
 
     const result = res.records[0]?.get('q');
-        if (!result) {
-          throw new HttpException(
-            'Interviewer or InterviewQuestion not found!',
-            HttpStatus.NOT_FOUND,
-          );
-        }
+    if (!result) {
+      throw new HttpException(
+        'Interviewer or InterviewQuestion not found!',
+        HttpStatus.NOT_FOUND
+      );
+    }
     return res.records[0]?.get('q').properties;
   }
 }

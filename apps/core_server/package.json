@@ -7,7 +7,7 @@
     "dev": "npm run with-env -- nest start --watch",
     "with-env": "dotenv -e ../../.env --",
     "start:prod": "node dist/main",
-    "lint": "eslint .",
+    "lint": "eslint . --fix",
     "lint:fix": "npm run lint --fix",
     "type-check": "tsc --noEmit"
   },

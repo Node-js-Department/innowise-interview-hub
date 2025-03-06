@@ -1,54 +1,54 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsNumber, IsOptional, IsString } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
-export interface Followup {
-    id: string;
-    tags: string[];
-    title: string;
-    weight: number;
-  }
+export interface IFollowup {
+  id: string,
+  tags: string[],
+  title: string,
+  weight: number,
+}
 
-  export interface Question {
-    id: string;
-    tags: string[];
-    title: string;
-    weight: number;
-    followUpQuestions: Followup[];
-  }
+export interface IQuestion {
+  id: string,
+  tags: string[],
+  title: string,
+  weight: number,
+  followUpQuestions: IFollowup[],
+}
 
-  export interface Theme {
-    id: string;
-    title: string;
-    questions: Map<string, Question>;
-  }
+export interface ITheme {
+  id: string,
+  title: string,
+  questions: Map<string, IQuestion>,
+}
 
-  export interface Topic {
-    id: string;
-    title: string;
-    themes: Map<string, Theme>;
-  }
+export interface ITopic {
+  id: string,
+  title: string,
+  themes: Map<string, ITheme>,
+}
 
-  export interface Domain {
-    id: string;
-    title: string;
-    topics: Map<string, Topic>;
-  }
+export interface IDomain {
+  id: string,
+  title: string,
+  topics: Map<string, ITopic>,
+}
 
 export class UpdatedAnswerDTO {
-  @ApiProperty({type: String})
+  @ApiProperty({ type: String })
   @IsString()
   interviewId: string;
 
-  @ApiProperty({type: String})
+  @ApiProperty({ type: String })
   @IsString()
   questionId: string;
 
-  @ApiProperty({type: String})
+  @ApiProperty({ type: String })
   @IsString()
   @IsOptional()
   comment?: string;
 
-  @ApiProperty({type: Number})
+  @ApiProperty({ type: Number })
   @IsNumber()
   @IsOptional()
   rate?: number;

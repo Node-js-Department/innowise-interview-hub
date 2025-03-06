@@ -10,7 +10,7 @@ export class CreateUserDTO {
 
   @IsString()
   @IsOptional()
-  role?: string
+  role?: string;
 
   @IsOptional()
   @IsString()
