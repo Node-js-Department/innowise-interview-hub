@@ -4,7 +4,7 @@ const InterviewsLayout = (props: { children: React.ReactNode }) => {
 
   const { children } = props;
   return (
-    <div>
+    <div className='h-full'>
       {children}
     </div>
   );
