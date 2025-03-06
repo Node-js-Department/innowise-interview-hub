@@ -1,21 +1,24 @@
-import { ImportService } from './import.service';
-import { ExportService } from './export.service';
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Res, HttpException, HttpStatus, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { QuestionsService } from './questions.service';
-import path from 'path';
 import * as fs from 'fs/promises';
+import path from 'path';
+
+import { Controller, Get, HttpException, HttpStatus, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
+
+import { TAny } from '@packages/shared';
+
+import { ExportService } from './export.service';
+import { ImportService } from './import.service';
+import { QuestionsService } from './questions.service';
 
 @ApiTags('questions')
 @Controller('questions')
 export class QuestionsController {
   constructor(private readonly questionsService: QuestionsService,
     private readonly importService: ImportService,
-    private readonly exportService: ExportService,
+    private readonly exportService: ExportService
   ) {}
-
 
   @Get()
   @ApiOperation({ summary: 'Get all questions (json)' })
@@ -31,13 +34,14 @@ export class QuestionsController {
   @ApiOperation({ summary: 'Export questions from db' })
   @ApiResponse({ status: 200, description: 'Data exported successfully' })
   @ApiResponse({ status: 500, description: 'Export error' })
-  async ExportJson(@Res() res: Response)  {
-    try{
+  async ExportJson(@Res() res: Response) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const dataToExport = await this.exportService.exportJson(res);
-      return{
+      return {
         message: 'Data exported successfully',
-      }
-    } catch(error){
+      };
+    } catch (error) {
       console.error('Export error', error);
       throw new HttpException(`Export error: ${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -48,13 +52,13 @@ export class QuestionsController {
   @ApiOperation({ summary: 'Import static data from server folder' })
   @ApiResponse({ status: 201, description: 'Data imported successfully' })
   @ApiResponse({ status: 500, description: 'Import error' })
-  async importStatic(): Promise<any> {
+  async importStatic(): Promise<TAny> {
     try {
       const result = await this.importService.importDataStatic();
       return {
         message: ' Data imported successfully',
         result,
-      }
+      };
     } catch (error) {
       console.error(' Import error:', error);
       throw new HttpException(`Import error: ${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -77,7 +81,7 @@ export class QuestionsController {
   @ApiResponse({ status: 500, description: 'Upload error' })
   @UseInterceptors(FileInterceptor('file'))
 
-  async upload(@UploadedFile() file: Express.Multer.File): Promise<any> {
+  async upload(@UploadedFile() file: Express.Multer.File): Promise<TAny> {
     try {
       if (!file) {
         throw new HttpException('File is required', HttpStatus.BAD_REQUEST);

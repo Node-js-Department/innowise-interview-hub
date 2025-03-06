@@ -47,7 +47,7 @@ export abstract class BaseNeodeService<T, CreateDto = Partial<T>, UpdateDto = Pa
       if (!instance) return [];
 
       const relatedData = instance.get(relationship);
-  
+
       return relatedData;
     } catch (error) {
       this.logger.error(`Error fetching related ${relationship} for ${this.modelName}:`, error);

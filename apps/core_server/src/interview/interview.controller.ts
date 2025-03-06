@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
-import { InterviewService } from './interview.service';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+
 import { CreateInterviewDto } from './interview.dto';
+import { InterviewService } from './interview.service';
 
 @Controller('interview')
 export class InterviewController {
@@ -20,6 +21,5 @@ export class InterviewController {
       createInterviewDto.timeDuration
     );
   }
-
 
 }

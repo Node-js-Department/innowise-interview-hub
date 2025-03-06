@@ -1,9 +1,11 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { JwtGuard } from './jwt-auth.guard';
-import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
+
+import { TAny } from '@packages/shared';
+
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
@@ -16,8 +18,8 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(AuthGuard('google')) // Handles the callback from Google
   async googleLoginCallback(@Req() req: Request, @Res() res: Response) {
-    const { username, email } = req.user as any;
-  
+    const { username, email } = req.user as TAny;
+
     if (!username || !email) {
       console.log('Google OAuth callback did not return username or email');
       return;
@@ -39,6 +41,7 @@ export class AuthController {
       const payload = await this.authService.validateToken(token);
 
       return { isValid: true, user: payload };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       return { isValid: false };
     }

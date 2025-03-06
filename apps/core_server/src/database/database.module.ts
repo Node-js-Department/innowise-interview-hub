@@ -5,7 +5,6 @@ import { EEntities } from './model';
 import { createNeo4jInstance, NEO4J_TOKEN } from './neode.provider';
 import { UserSchema } from './schemas/user.schema';
 
-
 @Module({
   providers: [
     {

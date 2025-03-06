@@ -7,7 +7,6 @@ import {
   Logger,
 } from '@nestjs/common';
 
-
 import { TAny } from '@packages/shared';
 
 @Catch()
@@ -16,7 +15,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
   private readonly logger = new Logger(AllExceptionsFilter.name);
 
   catch(exception: unknown, host: ArgumentsHost) {
-    console.log(exception)
+    console.log(exception);
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
 
@@ -30,7 +29,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     }
 
     this.logger.error(`[${status}] ${message}`);
-    
+
     response.status(status).json({
       statusCode: status,
       message,
