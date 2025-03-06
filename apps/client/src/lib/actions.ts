@@ -1,7 +1,7 @@
 'use server';
 
 export const isTokenValid = async (token: string) => {
-  const backend = `${process.env.CORE_SERVICE_HOST}:${process.env.CORE_SERVICE_PORT}`;
+  const backend = `${process.env.NEXT_PUBLIC_CORE_SERVICE_HOST}:${process.env.NEXT_PUBLIC_CORE_SERVICE_PORT}`;
 
   const response = await fetch(`http://${backend}/api/auth/validate`, {
     headers: {

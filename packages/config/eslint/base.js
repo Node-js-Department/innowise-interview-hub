@@ -11,7 +11,7 @@ module.exports = {
 	},
 	ignorePatterns: ["vite.config.ts", "**/dist/", "**/out/", "**/build/", "clientPrisma","**/src/components"],
 	extends: [
-		"turbo",
+		//"turbo",
 		"eslint:recommended",
 		"plugin:@typescript-eslint/recommended",
 		"plugin:@typescript-eslint/eslint-recommended",

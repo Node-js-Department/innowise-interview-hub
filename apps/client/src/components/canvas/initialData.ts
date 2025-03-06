@@ -1,4 +1,6 @@
-export const domains = [
+import { ISetInterview, TagType } from "./types/types";
+
+export const domains: ISetInterview[] = [
   {
     title: "Frontend",
     topics: [
@@ -103,7 +105,7 @@ export const domains = [
             questions: [
               {
                 weight: 7,
-                tags: ["junior", "middle", "mike wasowski interview"],
+                tags: ["junior", "middle", "mike wasowski interview" as TagType],
                 title: "Explain Promises and their benefits over callbacks.",
                 followUpQuestions: [
                   {
@@ -128,7 +130,7 @@ export const domains = [
               },
               {
                 weight: 8,
-                tags: ["junior", "middle", "mike wasowski interview"],
+                tags: ["junior", "middle", "mike wasowski interview" as TagType],
                 title:
                   "What is async/await and how does it simplify asynchronous code?",
                 followUpQuestions: [
@@ -152,7 +154,7 @@ export const domains = [
             questions: [
               {
                 weight: 6,
-                tags: ["junior", "middle", "mike wasowski interview"],
+                tags: ["junior", "middle", "mike wasowski interview" as TagType],
                 title: "What is a closure in JavaScript?",
                 followUpQuestions: [
                   {
@@ -205,7 +207,7 @@ export const domains = [
             questions: [
               {
                 weight: 8,
-                tags: ["middle", "senior", "mike wasowski interview"],
+                tags: ["middle", "senior", "mike wasowski interview" as TagType],
                 title: "What is the Node.js Event Loop and how does it work?",
                 followUpQuestions: [
                   {
@@ -302,7 +304,7 @@ export const domains = [
             questions: [
               {
                 weight: 6,
-                tags: ["junior", "middle", "mike wasowski interview"],
+                tags: ["junior", "middle", "mike wasowski interview" as TagType],
                 title:
                   "What are the key differences between SQL and NoSQL databases?",
                 followUpQuestions: [
@@ -411,7 +413,7 @@ export const domains = [
             questions: [
               {
                 weight: 6,
-                tags: ["junior", "middle", "mike wasowski interview"],
+                tags: ["junior", "middle", "mike wasowski interview" as TagType],
                 title:
                   "What is a container and how does it differ from a virtual machine?",
                 followUpQuestions: [
@@ -718,7 +720,7 @@ export const domains = [
                   },
                   {
                     weight: 8,
-                    tags: ["senior", "mike wasowski interview"],
+                    tags: ["senior", "mike wasowski interview" as TagType],
                     title:
                       "What are the trade-offs of using a GraphQL API versus multiple REST endpoints?",
                   },
@@ -736,7 +738,7 @@ export const domains = [
             questions: [
               {
                 weight: 7,
-                tags: ["junior", "middle", "mike wasowski interview"],
+                tags: ["junior", "middle", "mike wasowski interview" as TagType],
                 title:
                   "What is the difference between horizontal and vertical scaling?",
                 followUpQuestions: [
@@ -811,7 +813,7 @@ export const domains = [
               },
               {
                 weight: 9,
-                tags: ["middle", "senior", "mike wasowski interview"],
+                tags: ["middle", "senior", "mike wasowski interview" as TagType],
                 title: "How do CDNs work and when should you use them?",
                 followUpQuestions: [
                   {

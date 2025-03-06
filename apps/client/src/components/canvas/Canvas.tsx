@@ -13,6 +13,7 @@ import {
   Controls,
   Edge,
   Node,
+  NodeMouseHandler,
   Panel,
   ReactFlow,
   useEdges,
@@ -84,7 +85,7 @@ export const Canvas = ({ nodes: allNodes }: ICanvasProps) => {
     return selectedEdgesList;
   };
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes as Node[]);
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
 
   const onConnect = useCallback(
@@ -156,7 +157,7 @@ export const Canvas = ({ nodes: allNodes }: ICanvasProps) => {
         onNodeClick={onNodeClick}
         onPaneClick={onPaneClick}
         onConnect={onConnect}
-        onNodeContextMenu={onNodeContextMenu}
+        onNodeContextMenu={onNodeContextMenu as unknown as NodeMouseHandler<Node>}
         nodeTypes={nodeTypes}
         fitView
         minZoom={0.2}
