@@ -1,34 +1,17 @@
-import { Type } from 'class-transformer';
-import { IsDate, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsString, IsArray, ArrayNotEmpty } from 'class-validator';
 
-export class CreateInterviewDTO {
-    @IsOptional()
-    @IsNumber()
-    score?: number;
+export class CreateInterviewDto {
+  @IsString()
+  interviewerId: string;
 
-    @IsOptional()
-    @IsDate()
-    @Type(() => Date)
-    interviewDate?: Date;
+  @IsString()
+  candidateId: string;
 
-    @IsOptional()
-    @IsNumber()
-    followUpCount?: number;
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  questions: string[];
 
-    @IsOptional()
-    @IsNumber()
-    questionCount?: number;
-
-    @IsOptional()
-    @IsDate()
-    @Type(() => Date)
-    time?: Date;
-
-    @IsOptional()
-    @IsString()
-    level?: string;
-}
-
-export class UpdateInterviewDTO {
-
+  @IsString()
+  timeDuration: string;
 }
