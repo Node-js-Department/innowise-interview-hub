@@ -1,7 +1,7 @@
 import { Neo4jService } from 'nest-neo4j';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { QueryResult, Record as Neo4jRecord } from 'neo4j-driver';
-import { Domain } from './questions.dto';
+import { Domain, UpdatedAnswerDTO } from './questions.dto';
 
 @Injectable()
 export class QuestionsService {
@@ -103,5 +103,24 @@ export class QuestionsService {
       })),
     };
   }
+  async takeEvaluatedQuestionsForInterview(dto: UpdatedAnswerDTO) {
+    const query = `
+      MATCH (i:Interview {id: $interviewId})-[:HAS_INTERVIEW_QUESTION]-(q:InterviewQuestion {questionId: $questionId})
+      SET q.comment = $comment, q.rate = $rate
+      RETURN q
+    `
+    const res: QueryResult = await this.neo4jService.write(query, {
+      interviewId: dto.interviewId, questionId: dto.questionId, comment: dto.comment, rate: dto.rate
+    });
+
+    const result = res.records[0]?.get('q');
+        if (!result) {
+          throw new HttpException(
+            'Interviewer or InterviewQuestion not found!',
+            HttpStatus.NOT_FOUND,
+          );
+        }
+    return res.records[0]?.get('q').properties;
   }
+}
 
