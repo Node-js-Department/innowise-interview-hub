@@ -54,3 +54,13 @@ export class UpdatedAnswerDTO {
   rate?: number;
 }
 
+export class SkipQuetionDTO {
+  @ApiProperty({ type: String })
+  @IsString()
+  interviewId: string;
+
+  @ApiProperty({ type: String })
+  @IsString()
+  questionId: string;
+}
+
