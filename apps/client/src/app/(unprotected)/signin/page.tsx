@@ -15,16 +15,16 @@ const LeftSection = () => (
   <section
     className='w-1/2 h-full'
     style={{
-        background: 'url("/sign-in-big-banner.png") center center no-repeat',
-        backgroundSize: 'cover',
-      }}
+      background: 'url("/sign-in-big-banner.png") center center no-repeat',
+      backgroundSize: 'cover',
+    }}
   >
     <div
       className='w-full h-full relative'
       style={{
-          background:
-            'linear-gradient(1.86deg, rgba(233, 57, 86, 0.7) -30.92%, rgba(0, 0, 0, 0.53) 98.5%)',
-        }}
+        background:
+          'linear-gradient(1.86deg, rgba(233, 57, 86, 0.7) -30.92%, rgba(0, 0, 0, 0.53) 98.5%)',
+      }}
     >
       <Dots />
       <SignInCompanyInfo />
@@ -117,17 +117,15 @@ const SigninCard = () => (
   </div>
 );
 
-const GoogleButton = () => (
-  <Link
-    href={`http://${process.env.CORE_SERVICE_HOST}:${process.env.CORE_SERVICE_PORT}/api/auth/google`}
-    className={twJoin(
-        'flex gap-x-4 items-center justify-center mt-4 w-[358px]',
-        'border-2 border-[#757575] cursor-pointer h-[60px] rounded-[29px] bg-white hover:bg-[#ebebeb]')}
-  >
-    <Image src='/google.svg' alt='google' width={28} height={28} />
-    <p className='text-[#767676] font-semibold text-xl'>Continue Google</p>
-  </Link>
-);
+const GoogleButton = () => (<Link
+  href={`http://${process.env.NEXT_PUBLIC_CORE_SERVICE_HOST}:${process.env.NEXT_PUBLIC_CORE_SERVICE_PORT}/api/auth/google`}
+  className={twJoin(
+    'flex gap-x-4 items-center justify-center mt-4 w-[358px]',
+    'border-2 border-[#757575] cursor-pointer h-[60px] rounded-[29px] bg-white hover:bg-[#ebebeb]')}
+>
+  <Image src='/google.svg' alt='google' width={28} height={28} />
+  <p className='text-[#767676] font-semibold text-xl'>Continue Google</p>
+</Link>);
 
 const Version = () => (
   <p className='text-blue-500 absolute bottom-24 left-1/2 -translate-x-1/2'>
