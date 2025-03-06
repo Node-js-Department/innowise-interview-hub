@@ -4,8 +4,7 @@ import { QueryResult } from 'neo4j-driver';
 import Neode from 'neode';
 
 import { NEO4J_TOKEN } from '@/database/neode.provider';
-import { Tfollowup } from '@/questions/questions.dto';
-
+import { TFollowup } from '@/questions/questions.dto';
 
 @Injectable()
 export class InterviewService {
@@ -69,7 +68,7 @@ export class InterviewService {
 
     const interviewRes = await this.neo4jService.write(
       `
-      CREATE (i:Interview {id: $interviewId, duration: $duration, createdAt: timestamp()})
+      CREATE (i:Interview {id: $interviewId, duration: $duration, createdAt: timestamp(),date: date()})
       WITH i
       MATCH (m:User {id: $interviewerId, role: 'Interviewer'})
       MATCH (s:User {id: $candidateId, role: 'Candidate'})
@@ -109,7 +108,6 @@ export class InterviewService {
              followups;
     `;
 
-
     const params = { interviewId };
 
     const res: QueryResult = await this.neo4jService.read(query, params);
@@ -123,7 +121,7 @@ export class InterviewService {
       id: record.get('question_id'),
       title: record.get('question_title'),
       weight: record.get('question_weight').toNumber(),
-      followupQuestions: (record.get('followups') || []).map((f: Tfollowup) => ({
+      followupQuestions: (record.get('followups') || []).map((f: TFollowup) => ({
         id: f.id,
         title: f.title,
         weight: +f.weight.toString(),
@@ -134,23 +132,22 @@ export class InterviewService {
   async getInterviewResults(interviewId: string) {
     const query = `
     MATCH (i:Interview {id: $interviewId})
-MATCH (i)-[:HAS_INTERVIEW_QUESTION]->(iq:InterviewQuestion)-[:REFERS_TO]->(q:Question)
-OPTIONAL MATCH (q)-[:HAS_FOLLOWUP]->(f:FollowUpQuestion)
+    MATCH (i)-[:HAS_INTERVIEW_QUESTION]->(iq:InterviewQuestion)-[:REFERS_TO]->(q:Question)
+    OPTIONAL MATCH (q)-[:HAS_FOLLOWUP]->(f:FollowUpQuestion)
 
-RETURN 
-  i.id AS interviewId,
-  i.duration AS interviewDuration,
-  i.date AS interviewDate,
-  SUM(iq.rate) AS totalScore,  
-  AVG(iq.rate) AS avgScore,
-  COUNT(DISTINCT q) AS totalQuestions,
-  COUNT(DISTINCT f) AS totalFollowQuestions;
-  COUNT(DISTINCT CASE WHEN q.isskip = true THEN q END) AS skippedQuestions,  
-  COUNT(DISTINCT CASE WHEN f.isskip = true THEN f END) AS skippedFollowQuestions;
-  `;
+    RETURN 
+      i.id AS interviewId,
+      i.duration AS interviewDuration,
+      i.date AS interviewDate,
+      SUM(iq.rate) AS totalScore,  
+      AVG(iq.rate) AS avgScore,
+      COUNT(DISTINCT q) AS totalQuestions,
+      COUNT(DISTINCT f) AS totalFollowQuestions,
+      COUNT(DISTINCT CASE WHEN iq.skip = true THEN iq END) AS skippedQuestions,  
+      COUNT(DISTINCT CASE WHEN f.skip = true THEN f END) AS skippedFollowQuestions;
+    `;
 
     const params = { interviewId };
-
     const res: QueryResult = await this.neo4jService.read(query, params);
 
     if (!res.records.length) {
@@ -159,26 +156,27 @@ RETURN
 
     const record = res.records[0];
     const interviewIdResult: string = record.get('interviewId');
-    // const interviewDuration: string = record.get('interviewDuration');
-    const interviewDate: string = record.get('date');
+    const interviewDate: string = record.get('interviewDate').toString();
+    const interviewDuration: number = record.get('interviewDuration');
     const avgScore: number = +record.get('avgScore').toString();
     const totalQuestions: number = +record.get('totalQuestions').toString();
     const totalFollowQuestions: number = +record.get('totalFollowQuestions').toString();
-    // const time = interviewDate - interviewDuration;
     const skippedQuestions: number = +record.get('skippedQuestions').toString();
     const skippedFollowQuestions: number = +record.get('skippedFollowQuestions').toString();
+
     const countPrimary = totalQuestions - skippedQuestions;
     const countFollowUp = totalFollowQuestions - skippedFollowQuestions;
 
     return {
       interviewId: interviewIdResult,
       interviewDate,
+      interviewDuration,
       avgScore,
       totalQuestions,
       totalFollowQuestions,
-      // time,
       countPrimary: `${countPrimary}/${totalQuestions}`,
       countFollowUp: `${countFollowUp}/${totalFollowQuestions}`,
     };
   }
+
 }
