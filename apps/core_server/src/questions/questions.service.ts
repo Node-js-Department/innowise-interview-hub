@@ -29,7 +29,7 @@ export class QuestionsService {
     }));
   }
 
-  async findAll(): Promise<any> {
+  async findAll() {
     const query = `
       MATCH (d:Domain)-[:HAS_TOPIC]->(t:Topic)
       OPTIONAL MATCH (t)-[:HAS_THEME]->(th:Theme)
