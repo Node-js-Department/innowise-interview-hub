@@ -15,7 +15,7 @@ export function CustomTrigger() {
   return (
     <button
       onClick={handleClick}
-      className='rounded-full shadow-md p-1'
+      className='rounded-full shadow-md p-1 fixed mt-19 ml-[-20px] bg-white z-30'
     >
       <Image
         src={angle}

@@ -26,7 +26,7 @@ const ProtectedLayout = (props: { children: React.ReactNode }) => {
       <div className='flex flex-row z-1'>
         <SidebarProvider>
           <AppSidebar onMenuItemClick={handleSidebarMenuItemClick}/>
-          <main>
+          <main className='shadow-md outline outline-gray-200 rounded m-3'>
             <CustomTrigger/>
             {children}
           </main>
