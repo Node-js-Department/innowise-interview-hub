@@ -23,7 +23,7 @@ import {
 
 // you also need to adjust the style import
 import "@xyflow/react/dist/style.css";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useCanvasInitialValues } from "@/components/canvas/hooks/use-canvas-initial-values";
 import { useLayoutNodes } from "./hooks/use-layout-nodes";
 import { INode, ISetInterview } from "./types/types";
@@ -43,6 +43,8 @@ export const Canvas = ({ nodes: allNodes }: ICanvasProps) => {
 
   const proOptions = { hideAttribution: true }
 
+  const [ selectedQuestions, setSelectedQuestions ] = useState<number>(0);
+
   const nodeTypes = useMemo(
     () => ({
       domainNode: DomainNode,
@@ -61,12 +63,17 @@ export const Canvas = ({ nodes: allNodes }: ICanvasProps) => {
     node: Node
   ) => {
     const edgesToNode = findAllEdgesToNode(node.id);
+    setSelectedQuestions((prev) => prev + 1);
     setEdges((edges) =>
-      edges.map((edge) =>
-        edgesToNode.some((newEdge) => newEdge.id === edge.id)
-          ? { ...edge, style: { stroke: "#c63031", strokeWidth: 2 } }
-          : { ...edge, style: {} }
-      )
+      edges.map((edge) => {
+        if (edgesToNode.some((newEdge) => newEdge.id === edge.id)) {
+          return { ...edge, style: { stroke: "#c63031", strokeWidth: 2 } }
+        } else {
+          setSelectedQuestions(0);
+          return { ...edge, style: {} };
+        }
+        
+      })
     );
   };
 
@@ -107,6 +114,7 @@ export const Canvas = ({ nodes: allNodes }: ICanvasProps) => {
           return { ...n, selected: false };
         })
       );
+      setSelectedQuestions(0);
     },
     [setEdges]
   );
@@ -119,20 +127,20 @@ export const Canvas = ({ nodes: allNodes }: ICanvasProps) => {
         return false;
       }
 
-      console.log(node);
-      let addQuestion = prompt("Do you want to add this question?", "yes");
-      if (addQuestion !== null) {
+      let addQuestionConfirm = confirm("Do you want to add this question?");
+      if (addQuestionConfirm !== null) {
         const edgesToNode = findAllEdgesToNode(node.id);
         setEdges((edges) =>
           edges.map((edge) =>
             edgesToNode.some((newEdge) => newEdge.id === edge.id)
               ? { ...edge, style: { stroke: "#c63031", strokeWidth: 2 } }
-              : edge
+              : { ...edge }
           )
         );
         setNodes((nodes) =>
           nodes.map((n) => (n.id === node.id ? { ...n, selected: true } : n))
         );
+        setSelectedQuestions((prev) => prev + 1)
       }
     },
     []
@@ -150,7 +158,9 @@ export const Canvas = ({ nodes: allNodes }: ICanvasProps) => {
   // );
 
   return (
-    <div style={{height: "100%" }} className=" w-full p-1 h-[calc(100%-12px)]">
+    <div className="w-full h-[calc(100%-216px)] px-2">
+      {selectedQuestions > 0 && 
+      <div className="text-center text-[#767676] font-semibold">{`Selected ${selectedQuestions} questions`}</div>}
       <ReactFlow
         nodes={nodes}
         edges={edges}
