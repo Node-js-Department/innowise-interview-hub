@@ -1,16 +1,16 @@
-import { Neo4jService } from 'nest-neo4j';
-import { Injectable } from '@nestjs/common';
-import { QueryResult, Record as Neo4jRecord } from 'neo4j-driver';
+import { Inject, Injectable } from '@nestjs/common';
+import { Record as Neo4jRecord } from 'neo4j-driver';
+import { NEO4J_TOKEN } from '@/database/neode.provider';
+import Neode from 'neode';
 
 @Injectable()
 export class QuestionsService {
   constructor(
-    private readonly neo4jService: Neo4jService,
+    @Inject(NEO4J_TOKEN) private readonly neode: Neode,
   ) {}
 
-
   async findAll(): Promise<Neo4jRecord[]> {
-    const res: QueryResult = await this.neo4jService.read(`MATCH (n) RETURN n`);
+    const res = await this.neode.readCypher(`MATCH (n) RETURN n`, {});
     return res.records.map(record => record.get('n'));
   }
 }

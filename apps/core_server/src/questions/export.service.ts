@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
 import axios from 'axios';
-import path from 'path';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 

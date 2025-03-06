@@ -11,8 +11,6 @@ async function bootstrap() {
       bufferLogs: true,
     });
 
-  app.enableCors({origin: 'http://localhost:3000'});
-
   app.setGlobalPrefix('api');
 
   const Swaggerconfig = new DocumentBuilder()
@@ -27,6 +25,8 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
 
   const configService = app.get(ConfigService);
+
+  app.enableCors({origin: `http://localhost:${configService.get('NEXT_PUBLIC_PORT', 3000)}`});
 
   app.useGlobalPipes(
     new ValidationPipe({

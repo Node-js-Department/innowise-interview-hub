@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
 import axios from 'axios';
 import * as fs from 'fs/promises';
 import path from 'path';

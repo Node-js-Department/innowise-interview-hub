@@ -3,10 +3,11 @@ import { AuthGuard } from '@nestjs/passport';
 import { JwtGuard } from './jwt-auth.guard';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService, private readonly configService: ConfigService) {}
 
   @Get('google')
   @UseGuards(AuthGuard('google')) // Triggers Google OAuth flow
@@ -26,7 +27,7 @@ export class AuthController {
     res.setHeader('Set-Cookie', `access_token=${payload.access_token}; HttpOnly; Path=/; Max-Age=3600`);
 
     // TODO: change this to use the env variables
-    res.status(200).redirect(`http://localhost:3000`);
+    res.status(200).redirect(`http://localhost:${this.configService.get('NEXT_PUBLIC_PORT', 3000)}`);
   }
 
   // TODO: throttle this endpoint to avoid token fishing?

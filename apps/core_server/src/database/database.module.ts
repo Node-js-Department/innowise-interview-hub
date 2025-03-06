@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 
 import { EEntities } from './model';
 import { createNeo4jInstance, NEO4J_TOKEN } from './neode.provider';
@@ -7,7 +7,6 @@ import { UserSchema } from './schemas/user.schema';
 import { InterviewSchema } from './schemas/interview.schema';
 
 @Module({
-  imports: [ConfigModule],
   providers: [
     {
       provide: NEO4J_TOKEN,
