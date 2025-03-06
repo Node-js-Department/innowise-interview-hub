@@ -6,7 +6,9 @@ import { ConfigService } from '@nestjs/config';
 import { TAny } from '@packages/shared';
 
 import { AuthService } from './auth.service';
+import { Public } from './auth.guard';
 
+@Public()
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService, private readonly configService: ConfigService) {}
