@@ -54,10 +54,21 @@ export class UpdatedAnswerDTO {
   rate?: number;
 }
 
+
 // eslint-disable-next-line @typescript-eslint/naming-convention
+export class SkipQuetionDTO {
+  @ApiProperty({ type: String })
+  @IsString()
+  interviewId: string;
+
+  @ApiProperty({ type: String })
+  @IsString()
+  questionId: string;
+}
 export type Tfollowup = {
   id: string,
   tags: string[],
   title: string,
   weight: string,
 };
+
