@@ -4,9 +4,11 @@ import { RouteChangesProvider } from 'nextjs-router-events';
 import React from 'react';
 import './style.css';
 import { ReactFlowProvider } from '@xyflow/react';
+import { Provider as StoreProvider } from 'react-redux';
 
 import { getLocale } from '@/i18next/client';
 import { LocaleProvider } from '@/hooks/locale-provider';
+import { store } from '@/providers/store';
 
 const RootLayout = ({
   children,
@@ -26,9 +28,11 @@ const RootLayout = ({
       <body>
         <RouteChangesProvider>
           <main>
-            <LocaleProvider value={locale}>
-              <ReactFlowProvider>{children}</ReactFlowProvider>
-            </LocaleProvider>
+            <StoreProvider store={store}>
+              <LocaleProvider value={locale}>
+                <ReactFlowProvider>{children}</ReactFlowProvider>
+              </LocaleProvider>
+            </StoreProvider>
           </main>
         </RouteChangesProvider>
         {/* eslint-disable-next-line @next/next/no-sync-scripts  */}

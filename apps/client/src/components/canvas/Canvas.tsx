@@ -27,6 +27,8 @@ import { useCallback, useMemo, useState } from "react";
 import { useCanvasInitialValues } from "@/components/canvas/hooks/use-canvas-initial-values";
 import { useLayoutNodes } from "./hooks/use-layout-nodes";
 import { INode, ISetInterview } from "./types/types";
+import { addQuestion, setQuestions } from '@/providers/store/slices/questionsSlice';
+import { useAppDispatch } from '@/hooks/use-dispatch';
 
 export interface ICanvasProps {
   nodes: ISetInterview[];
@@ -44,6 +46,7 @@ export const Canvas = ({ nodes: allNodes }: ICanvasProps) => {
   const proOptions = { hideAttribution: true }
 
   const [ selectedQuestions, setSelectedQuestions ] = useState<number>(0);
+  const dispatch = useAppDispatch();
 
   const nodeTypes = useMemo(
     () => ({
@@ -59,17 +62,15 @@ export const Canvas = ({ nodes: allNodes }: ICanvasProps) => {
   const allEdges = useEdges();
 
   const onNodeClick = (
-    e: React.MouseEvent<Element, MouseEvent>,
+    event: React.MouseEvent<Element, MouseEvent>,
     node: Node
   ) => {
     const edgesToNode = findAllEdgesToNode(node.id);
-    setSelectedQuestions((prev) => prev + 1);
     setEdges((edges) =>
       edges.map((edge) => {
         if (edgesToNode.some((newEdge) => newEdge.id === edge.id)) {
           return { ...edge, style: { stroke: "#c63031", strokeWidth: 2 } }
         } else {
-          setSelectedQuestions(0);
           return { ...edge, style: {} };
         }
         
@@ -115,6 +116,7 @@ export const Canvas = ({ nodes: allNodes }: ICanvasProps) => {
         })
       );
       setSelectedQuestions(0);
+      dispatch(setQuestions([]));
     },
     [setEdges]
   );
@@ -123,7 +125,7 @@ export const Canvas = ({ nodes: allNodes }: ICanvasProps) => {
     (event: React.MouseEvent<Element, MouseEvent>, node: INode) => {
       // Prevent native context menu from showing
       event.preventDefault();
-      if (node.type !== "questionNode" && node.type !== "followUpNode") {
+      if (node.type !== "questionNode") {
         return false;
       }
 
@@ -140,7 +142,8 @@ export const Canvas = ({ nodes: allNodes }: ICanvasProps) => {
         setNodes((nodes) =>
           nodes.map((n) => (n.id === node.id ? { ...n, selected: true } : n))
         );
-        setSelectedQuestions((prev) => prev + 1)
+        setSelectedQuestions((prev) => prev + 1);
+        dispatch(addQuestion({id: node.id}));
       }
     },
     []
