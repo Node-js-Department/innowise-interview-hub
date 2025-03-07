@@ -14,4 +14,5 @@ export class CreateInterviewDto {
 
   @IsString()
   timeDuration: string;
+
 }

@@ -6,6 +6,7 @@ import { UserService } from './user.service';
 
 import { EUserRole } from '@/common/models';
 
+@ApiTags('Users')
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -39,6 +40,10 @@ export class UserController {
   })
   @ApiBody({ type: CreateUserDTO })
   @Post()
+  @ApiOperation({ summary: 'Create new user' })
+  @ApiResponse({ status: 201, description: 'OK' })
+  @ApiResponse({ status: 400, description: 'Error' })
+  @ApiBody({ type: CreateUserDTO })
   async createUser(@Body() dto: CreateUserDTO) {
     return await this.userService.createNewUser(dto);
   }

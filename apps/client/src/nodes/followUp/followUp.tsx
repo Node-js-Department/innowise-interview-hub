@@ -5,7 +5,6 @@ import { INodeContent } from '@/components/canvas/types/types';
 export function FollowUpNode(props: NodeProps) {
   const { data, targetPosition, selected } = props;
 
-  console.log('props', props);
   const { label } = data as unknown as INodeContent;
 
   return (

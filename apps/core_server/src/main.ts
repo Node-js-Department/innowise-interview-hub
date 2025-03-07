@@ -28,7 +28,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   app.use(cookieParser());
-  app.enableCors({ origin: `http://localhost:${configService.get('NEXT_PUBLIC_PORT', 3000)}` });
+  app.enableCors({ origin: `http://localhost:${configService.get('NEXT_PUBLIC_PORT', 3000)}`, credentials: true });
 
   app.useGlobalPipes(
     new ValidationPipe({
