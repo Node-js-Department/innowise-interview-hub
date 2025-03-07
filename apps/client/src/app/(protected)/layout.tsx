@@ -8,14 +8,14 @@ const ProtectedLayout = async ({ children }: { children: React.ReactNode }) => {
   const cookieStore = await cookies();
   const token = cookieStore.get('access_token')?.value;
 
-  if (!token) {
-    redirect('/signin');
-  }
-
-  const isValid = await isTokenValid(token);
-  if (!isValid) {
-    redirect('/signin');
-  }
+  // if (!token) {
+  //   redirect('/signin');
+  // }
+  //
+  // const isValid = await isTokenValid(token);
+  // if (!isValid) {
+  //   redirect('/signin');
+  // }
 
   return (
     children
