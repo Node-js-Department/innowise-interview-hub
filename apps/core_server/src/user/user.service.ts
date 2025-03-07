@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { NEO4J_TOKEN } from 'src/database/neode.provider';
 import { EEntities } from 'src/database/model';
 import Neode from 'neode';
@@ -19,6 +19,53 @@ export class UserService
     try {
       const instance = await this.neode.model(this.modelName).first('email', email);
       return instance ? (await instance.toJson() as TUser) : null;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async createNewUser(dto: CreateUserDTO) {
+    try {
+      const user = await this.findOneByEmail(dto.email);
+      if (user) {
+        throw new BadRequestException('Email already in used');
+      }
+      return this.create(dto);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findUserById(id: string) {
+    try {
+      const user = await this.findOne(id);
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateUserById(id: string, dto: UpdateUserDTO) {
+    try {
+      const user = await this.update(id, dto);
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteUserById(id: string) {
+    try {
+      const user = await this.delete(id);
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
     } catch (error) {
       throw error;
     }

@@ -76,6 +76,29 @@ export abstract class BaseNeodeService<T, CreateDto = Partial<T>, UpdateDto = Pa
     }
   }
 
+  async findByEmailAndName(name?: string, email?: string): Promise<T[]> {
+    try {
+      const query: Partial<{
+        name: string,
+        email: string,
+        role: EUserRole.Candidate,
+      }> = { role: EUserRole.Candidate };
+      if (name) {
+        query.name = name;
+      }
+      if (email) {
+        query.email = email;
+      }
+
+      const instances = await this.neode.model(this.modelName).all(query);
+      const promises = instances.map((node: Neode.Node<T>) => node.toJson()) as T[];
+      return await Promise.all(promises);
+    } catch (error) {
+      this.logger.error(`Error fetching all ${this.modelName}:`, error);
+      throw error;
+    }
+  }
+
   async update(id: string, data: UpdateDto): Promise<T | null> {
     try {
       const instance = await this.neode.model(this.modelName).first('id', id);
