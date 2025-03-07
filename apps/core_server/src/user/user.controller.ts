@@ -1,10 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { CreateUserDTO, UpdateUserDTO } from './user.dto';
 import { UserService } from './user.service';
 
 import { EUserRole } from '@/common/models';
 
+@ApiTags('Users')
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -20,6 +22,10 @@ export class UserController {
   }
 
   @Post()
+  @ApiOperation({ summary: 'Create new user' })
+  @ApiResponse({ status: 201, description: 'OK' })
+  @ApiResponse({ status: 400, description: 'Error' })
+  @ApiBody({ type: CreateUserDTO })
   async createUser(@Body() dto: CreateUserDTO) {
     return await this.userService.create(dto);
   }

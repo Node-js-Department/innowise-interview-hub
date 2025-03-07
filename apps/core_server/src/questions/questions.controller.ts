@@ -4,7 +4,7 @@ import path from 'path';
 
 import { Controller, Get, Post, Body, Res, HttpException, HttpStatus, UploadedFile, UseInterceptors, Put } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiConsumes, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 
 import { TAny } from '@packages/shared';
@@ -22,18 +22,44 @@ export class QuestionsController {
     private readonly exportService: ExportService
   ) { }
 
-  @ApiOperation({ summary: 'Skip quetion' })
-  @ApiResponse({ status: 404, description: 'Interviewer or InterviewQuestion not found!' })
-  @ApiOkResponse()
   @Put('skip')
+  @ApiOperation({ summary: 'Skip question' })
+  @ApiBody({
+    description: 'Provide interviewId and questionId to skip',
+    examples: {
+      example1: {
+        summary: 'Skipping a question',
+        value: {
+          interviewId: 'interview_1741329321841',
+          questionId: 'e52eb952-2b02-4924-9c69-447aabc0fc10',
+        },
+      },
+    },
+  })
+  @ApiResponse({ status: 200, description: 'Question skipped successfully' })
+  @ApiResponse({ status: 404, description: 'Interviewer or InterviewQuestion not found!' })
   async skip(@Body() dto: SkipQuetionDTO) {
     return this.questionsService.skipQuetion(dto);
   }
 
-  @ApiOperation({ summary: 'Rate and comment on the candidate' })
-  @ApiResponse({ status: 404, description: 'Interviewer or InterviewQuestion not found!' })
-  @ApiOkResponse()
   @Put('evaluate')
+  @ApiOperation({ summary: 'Rate and comment on the candidate' })
+  @ApiBody({
+    description: 'Provide interviewId, questionId, rating, and optional comment',
+    examples: {
+      example1: {
+        summary: 'Evaluating a question',
+        value: {
+          interviewId: 'interview_1741329321841',
+          questionId: 'e52eb952-2b02-4924-9c69-447aabc0fc10',
+          rate: 4,
+          comment: 'Good explanation',
+        },
+      },
+    },
+  })
+  @ApiResponse({ status: 200, description: 'Evaluation saved successfully' })
+  @ApiResponse({ status: 404, description: 'Interviewer or InterviewQuestion not found!' })
   async takeEvaluated(@Body() dto: UpdatedAnswerDTO) {
     return this.questionsService.takeEvaluatedQuestionsForInterview(dto);
   }
@@ -84,6 +110,31 @@ export class QuestionsController {
   }
 
   @Post('followup')
+  @ApiOperation({ summary: 'Get follow-up questions for a specific question' })
+  @ApiBody({
+    description: 'Provide questionId to get related follow-up questions',
+    examples: {
+      example1: {
+        summary: 'Fetching follow-up questions',
+        value: {
+          questionId: 'e52eb952-2b02-4924-9c69-447aabc0fc10',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'List of follow-up questions',
+    content: {
+      'application/json': {
+        example: [
+          { id: 'd23ef8ee-ea25-4290-b3d8-cc8c45ebe83d',
+            title: 'Explain the rules of Hooks and why theyre important.',
+            weight: 9 },
+        ],
+      },
+    },
+  })
   async getFollowupQuestions(@Body('questionId') questionId: string) {
     return await this.questionsService.getFollowupQuestions(questionId);
   }
