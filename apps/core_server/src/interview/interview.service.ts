@@ -68,25 +68,19 @@ export class InterviewService {
 
     const interviewRes = await this.neo4jService.write(
       `
-    CREATE (i:Interview {id: $interviewId, duration: $duration, createdAt:datetime()})
-WITH i
-MATCH (m:User {id: $interviewerId, role: 'Interviewer'})
-MATCH (s:User {id: $candidateId, role: 'Candidate'})
-MERGE (m)-[:HAS_INTERVIEW]->(i)
-MERGE (s)-[:HAS_INTERVIEW]->(i)
-WITH i, $questions AS questions
-UNWIND questions AS questionId
-  MATCH (q:Question {id: questionId})
-  CREATE (iq:InterviewQuestion {questionId: questionId, rate: 0, comment: '', skip: false})
-  MERGE (i)-[:HAS_INTERVIEW_QUESTION]->(iq)
-  MERGE (iq)-[:REFERS_TO]->(q)
-  WITH i, q, iq
-  OPTIONAL MATCH (q)-[:HAS_FOLLOWUP]->(f:FollowUpQuestion)
-  WHERE f IS NOT NULL
-  CREATE (ifq:InterviewFollowUpQuestion {rate: 0, comment: '', skip: false})
-  MERGE (iq)-[:HAS_INTERVIEW_FOLLOWUP]->(ifq)
-  MERGE (ifq)-[:REFERS_TO]->(f)
-RETURN i.id AS interviewId
+      CREATE (i:Interview {id: $interviewId, duration: $duration, createdAt:datetime()})
+      WITH i
+      MATCH (m:User {id: $interviewerId, role: 'Interviewer'})
+      MATCH (s:User {id: $candidateId, role: 'Candidate'})
+      MERGE (m)-[:HAS_INTERVIEW]->(i)
+      MERGE (s)-[:HAS_INTERVIEW]->(i)
+      WITH i
+      UNWIND $questions AS questionId
+        MATCH (q:Question {id: questionId})
+        CREATE (iq:InterviewQuestion {questionId: questionId, rate: 0, comment: '', skip: false})
+        MERGE (i)-[:HAS_INTERVIEW_QUESTION]->(iq)
+        MERGE (iq)-[:REFERS_TO]->(q)
+      RETURN i.id AS interviewId
 
       `,
       {
