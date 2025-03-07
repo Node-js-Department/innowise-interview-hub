@@ -6,7 +6,7 @@ export const useCanvasInitialValues = (nodes: ISetInterview[]) => {
 
   nodes.forEach((domainNode) => {
     transformedNodes.push({
-      id: `db-${idCounter++}`,
+      id: domainNode.id,
       type: "domainNode",
       data: { label: domainNode.title },
     });
@@ -14,7 +14,7 @@ export const useCanvasInitialValues = (nodes: ISetInterview[]) => {
     // Iterate through topics
     domainNode.topics.forEach((topic) => {
       transformedNodes.push({
-        id: `db-${idCounter++}`,
+        id: topic.id,
         type: "topicNode",
         data: { label: topic.title },
         coreTitle: domainNode.title,
@@ -23,7 +23,7 @@ export const useCanvasInitialValues = (nodes: ISetInterview[]) => {
       // Iterate through themes
       topic.themes.forEach((theme) => {
         transformedNodes.push({
-          id: `db-${idCounter++}`,
+          id: theme.id,
           type: "themeNode",
           data: { label: theme.title },
           topicTitle: topic.title,
@@ -32,7 +32,7 @@ export const useCanvasInitialValues = (nodes: ISetInterview[]) => {
         // Iterate through questions
         theme.questions.forEach((question) => {
           transformedNodes.push({
-            id: `db-${idCounter++}`,
+            id: question.id,
             type: "questionNode",
             data: {
               weight: question.weight,
@@ -45,7 +45,7 @@ export const useCanvasInitialValues = (nodes: ISetInterview[]) => {
           // Iterate through followUpQuestions
           question.followUpQuestions?.forEach((followUp) => {
             transformedNodes.push({
-              id: `db-${idCounter++}`,
+              id: followUp.id,
               type: "followUpNode",
               data: {
                 weight: followUp.weight,

@@ -1,6 +1,7 @@
 export interface IQuestion {
-  weight: number;
-  tags: TagType[];
+  id: string;
+  weight?: number;
+  tags?: TagType[];
   title: string;
   followUpQuestions?: IQuestion[];
 }
@@ -8,16 +9,19 @@ export interface IQuestion {
 export interface ITheme {
   title: string;
   questions: IQuestion[];
+  id: string;
 }
 
 export interface ITopic {
   themes: ITheme[];
   title: string;
+  id: string;
 }
 
 export interface ISetInterview {
   title: string;
   topics: ITopic[];
+  id: string;
 }
 
 export type TagType = "middle" | "senior" | "junior";
