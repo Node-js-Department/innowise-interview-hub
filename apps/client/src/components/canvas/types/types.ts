@@ -24,6 +24,11 @@ export interface ISetInterview {
   id: string;
 }
 
+export interface ISetCandidate {
+  id: string;
+  name: string;
+}
+
 export type TagType = "middle" | "senior" | "junior";
 
 export type NodeType = "questionNode" | "domainNode" | "themeNode" | "topicNode" | "followUpNode"
