@@ -1,39 +1,51 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
 import { IsEmail, IsOptional, IsString } from 'class-validator';
 
+import { EUserRole } from '@/common/models';
+
 export class CreateUserDTO {
-  @ApiProperty({ example: 'Semen', description: 'Name' })
+  @ApiProperty({ type: String })
   @IsString()
   name: string;
 
-  @ApiProperty({ example: 'ivan@example.com', description: 'Email' })
+  @ApiProperty({ type: String })
   @IsString()
   @IsEmail()
   email: string;
 
-  @ApiProperty({ example: 'Candidate | Interviewer', description: 'Role пользователя', default: 'Candidate' })
-@IsString()
-@IsOptional()
-@Transform(({ value }) => value ?? 'Candidate')
-role?: string;
+  @ApiProperty({ enum: EUserRole })
+  @IsString()
+  @IsOptional()
+  role?: string;
 
-  @ApiProperty({ example: 'JavaScript', description: 'technology', required: false })
+  @ApiProperty({ type: String })
+  @IsOptional()
+  @IsString()
+  technology?: string;
+}
+
+export class UpdateUserDTO {
+  @ApiProperty({ type: String })
+  @IsString()
+  @IsOptional()
+  name?: string;
+
+  @ApiProperty({ type: String })
+  @IsEmail()
+  @IsOptional()
+  email?: string;
+
+  @ApiProperty({ type: String })
   @IsString()
   @IsOptional()
   technology?: string;
 }
 
-export class UpdateUserDTO {
+export class FindUserByNameDTO {
   @IsString()
-  @IsOptional()
-  name?: string;
+  name: string;
 
   @IsEmail()
-  @IsOptional()
-  email?: string;
-
   @IsString()
-  @IsOptional()
-  technology?: string;
+  email: string;
 }
