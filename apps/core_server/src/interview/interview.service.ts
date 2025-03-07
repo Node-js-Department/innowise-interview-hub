@@ -14,7 +14,7 @@ export class InterviewService {
   ) {}
 
   async findAll() {
-    const res = await this.neo4jService.read('MATCH (i:Interview) RETURN i', {});
+    const res = await this.neo4jService.read('MATCH (i:Interview) RETURN i.id, i.duration, i.createdAt', {});
     return res.records.map(record => record.get('i'));
   }
 
@@ -80,7 +80,7 @@ export class InterviewService {
         CREATE (iq:InterviewQuestion {questionId: questionId, rate: 0, comment: '', skip: false})
         MERGE (i)-[:HAS_INTERVIEW_QUESTION]->(iq)
         MERGE (iq)-[:REFERS_TO]->(q)
-      RETURN i
+      RETURN i.id AS interviewId
 
       `,
       {
@@ -92,7 +92,7 @@ export class InterviewService {
       }
     );
 
-    return interviewRes.records[0]?.get('i');
+    return interviewRes.records[0]?.get('interviewId');
   }
 
   async getInterviewQuestions(interviewId: string) {
@@ -179,12 +179,12 @@ export class InterviewService {
       'Date of creation': interviewDate,
       'Date of completed': interviewCompleted,
       'choosen duration': interviewDuration,
-      'real duration': interviewRealDuration,
+      'real duration (min)': interviewRealDuration,
       score: avgScore,
       'all questions count': totalQuestions,
       'all followup questions': totalFollowQuestions,
-      countPrimary: `${countPrimary}/${totalQuestions}`,
-      countFollowUp: `${countFollowUp}/${totalFollowQuestions}`,
+      'answered primary questions': `${countPrimary}/${totalQuestions}`,
+      'answered follow-up questions': `${countFollowUp}/${totalFollowQuestions}`,
     };
   }
 
