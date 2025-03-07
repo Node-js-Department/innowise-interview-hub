@@ -68,7 +68,7 @@ export class InterviewService {
 
     const interviewRes = await this.neo4jService.write(
       `
-      CREATE (i:Interview {id: $interviewId, duration: $duration, createdAt: timestamp(),date: date()})
+      CREATE (i:Interview {id: $interviewId, duration: $duration, createdAt:datetime()})
       WITH i
       MATCH (m:User {id: $interviewerId, role: 'Interviewer'})
       MATCH (s:User {id: $candidateId, role: 'Candidate'})
@@ -134,11 +134,14 @@ export class InterviewService {
     MATCH (i:Interview {id: $interviewId})
     MATCH (i)-[:HAS_INTERVIEW_QUESTION]->(iq:InterviewQuestion)-[:REFERS_TO]->(q:Question)
     OPTIONAL MATCH (q)-[:HAS_FOLLOWUP]->(f:FollowUpQuestion)
-
+    SET i.completedAt = datetime()
+    set i.realDuration = duration.between(i.createdAt, i.completedAt).minutes
     RETURN 
       i.id AS interviewId,
       i.duration AS interviewDuration,
-      i.date AS interviewDate,
+      i.completedAt AS interviewCompleted,
+      i.realDuration AS interviewRealDuration,
+      i.createdAt AS interviewDate,
       SUM(iq.rate) AS totalScore,  
       AVG(iq.rate) AS avgScore,
       COUNT(DISTINCT q) AS totalQuestions,
@@ -148,7 +151,7 @@ export class InterviewService {
     `;
 
     const params = { interviewId };
-    const res: QueryResult = await this.neo4jService.read(query, params);
+    const res: QueryResult = await this.neo4jService.write(query, params);
 
     if (!res.records.length) {
       throw new Error(`Interview ${interviewId} not found`);
@@ -156,8 +159,12 @@ export class InterviewService {
 
     const record = res.records[0];
     const interviewIdResult: string = record.get('interviewId');
+
     const interviewDate: string = record.get('interviewDate').toString();
     const interviewDuration: number = record.get('interviewDuration');
+    const interviewRealDuration: string = record.get('interviewRealDuration').toString();
+    const interviewCompleted: string = record.get('interviewCompleted').toString();
+
     const avgScore: number = +record.get('avgScore').toString();
     const totalQuestions: number = +record.get('totalQuestions').toString();
     const totalFollowQuestions: number = +record.get('totalFollowQuestions').toString();
@@ -169,11 +176,13 @@ export class InterviewService {
 
     return {
       interviewId: interviewIdResult,
-      interviewDate,
-      interviewDuration,
-      avgScore,
-      totalQuestions,
-      totalFollowQuestions,
+      'Date of creation': interviewDate,
+      'Date of completed': interviewCompleted,
+      'choosen duration': interviewDuration,
+      'real duration': interviewRealDuration,
+      score: avgScore,
+      'all questions count': totalQuestions,
+      'all followup questions': totalFollowQuestions,
       countPrimary: `${countPrimary}/${totalQuestions}`,
       countFollowUp: `${countFollowUp}/${totalFollowQuestions}`,
     };
