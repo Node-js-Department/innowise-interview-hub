@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { ArrowRight } from 'lucide-react';
 
 import apiHttp from '@/api/api';
 import { Button } from '@/components/ui/button';
@@ -22,6 +23,7 @@ interface IUser {
   email: string,
 }
 
+// TODO:  make conponents, separate logic to different components
 const UsersPage = () => {
   const dispatch = useAppDispatch();
   const [users, setUsers] = useState<IUser[]>([]);
@@ -41,6 +43,7 @@ const UsersPage = () => {
         setUsers(response.data);
       } catch (error) {
         setError('Error fetching users');
+        console.log(error);
       } finally {
         setLoading(false);
       }
@@ -57,6 +60,7 @@ const UsersPage = () => {
         router.push('/interview/questions');
       } catch (error) {
         setError('Error get data candidate');
+        console.log(error);
       } finally {
         setLoading(false);
       }
@@ -67,14 +71,22 @@ const UsersPage = () => {
           email,
         });
         dispatch(setUser(response.data));
-        router.push('interview/questions');
+        router.push('/interview/questions');
       } catch (error) {
         setError('Error get user');
+        console.log(error);
       } finally {
         setLoading(false);
       }
     }
   };
+
+  // TODO: put duration for the second page
+  console.log('duration', duration);
+
+  if (error) {
+    return <p className='text-red-500'>{error}</p>;
+  }
 
   return (
     <div className='flex flex-col items-center justify-center w-full min-h-screen py-12 px-6'>
@@ -144,9 +156,11 @@ const UsersPage = () => {
 
         <Button
           onClick={handleNext}
-          className='bg-red-600 text-white px-6 py-2 rounded-lg'
+          className='cursor-pointer'
+          variant='destructive'
+          disabled={loading}
         >
-          Next →
+          <span>Next</span><ArrowRight className='w-5 h-5' />
         </Button>
       </div>
     </div>

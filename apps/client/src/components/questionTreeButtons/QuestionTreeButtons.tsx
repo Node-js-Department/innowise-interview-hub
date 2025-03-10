@@ -9,11 +9,13 @@ import axiosApi from '@/api/api';
 import { setError, setLoading } from "@/providers/store/slices/questionsSlice";
 import { useAppDispatch } from "@/hooks/use-dispatch";
 import { setInterview } from "@/providers/store/slices/interviewSlice";
+import { getUserData } from "@/providers/store/selectors/uesr";
 
 export const QuestionTreeButtons = () => {
   const allQuestions = useSelector(getQuestions);
   const error = useSelector(getQuestionsError);
   const loading = useSelector(getQuestionsIsLoading);
+  const user = useSelector(getUserData);
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -22,10 +24,11 @@ export const QuestionTreeButtons = () => {
     dispatch(setError(null));
     const questionIds = allQuestions.map((item) => item.id);
 
+    // TODO: set duration & interviewerId (now is mocked data)
     try {
       const response = await axiosApi.post('/interview/create', { 
         questions: questionIds,
-        candidateId: '90c83dbc-2e86-40d5-8300-3b052da132fb',
+        candidateId: user?.id,
         interviewerId: 'b8966f1c-edfe-493b-8274-218bdcc55380',
         timeDuration: '60'
       });

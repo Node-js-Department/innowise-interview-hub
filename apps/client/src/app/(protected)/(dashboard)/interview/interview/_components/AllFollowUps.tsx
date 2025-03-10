@@ -1,7 +1,8 @@
 import * as React from 'react';
+
 import {
   FollowUpQuestion,
-} from '@app/(protected)/(dashboard)/interviewer/interviews/Interview/_components/FollowUpQuestion';
+} from '@/app/(protected)/(dashboard)/interview/interview/_components/FollowUpQuestion';
 
 type TProps = {
   questions: string[],

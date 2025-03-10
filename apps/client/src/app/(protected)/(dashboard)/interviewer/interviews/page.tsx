@@ -1,9 +1,9 @@
 import React from 'react';
 
-const InterviesPage = () => (
+const InterviewsPage = () => (
   <div>
     <div>Hello!</div>
   </div>
 );
 
-export default InterviesPage;
+export default InterviewsPage;
