@@ -34,7 +34,9 @@ export const FollowUpQuestion = ({ question }: TFollowUpQuestionType) => {
           className='w-5 h-5'
         />
         ) : (
-          <div className='w-2 h-2 bg-gray-500 rounded-full flex-shrink-0' />
+          <div className='w-5 flex justify-center items-center'>
+            <span className='w-2 h-2 bg-gray-500 rounded-full flex-shrink-0' />
+          </div>
       )}
       <span className={isAsked ? 'text-gray-600' : 'text-gray-400'}>
         {question}
