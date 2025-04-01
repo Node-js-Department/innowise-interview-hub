@@ -14,7 +14,7 @@
     "clean": "find ./apps ./packages -type d -name dist -prune -exec rm -rf {} +"
   },
   "dependencies": {
-    "@nestjs/config": "^4.0.1",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/mapped-types": "*",
     "commander": "^13.1.0",
     "cookie-parser": "^1.4.7",
