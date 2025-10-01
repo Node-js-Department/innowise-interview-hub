@@ -9,7 +9,7 @@
     "./style.js"
   ],
   "dependencies": {
-    "@next/eslint-plugin-next": "^15.0.3",
+    "@next/eslint-plugin-next": "^15.5.4",
     "@stylistic/stylelint-config": "^2.0.0",
     "@stylistic/stylelint-plugin": "^3.0.0",
     "@types/eslint": "^8.44.8",
